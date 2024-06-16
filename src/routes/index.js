@@ -1,15 +1,15 @@
-const {Router} = require('express');
+const { Router } = require('express');
 
-const userRouter = require("./user/user.route");
-const wordRouter = require("./word/word.route");
+const userRouter = require('./user/user.route');
+const wordRouter = require('./word/word.route');
 
 const router = Router();
 
-router.use("/user", userRouter);
+router.use('/users', userRouter);
 
-router.use("/word", wordRouter);
+router.use('/words', wordRouter);
 
- // EB health check
+// EB health check
 router.get('/', (_, res) => {
     res.status(200).json({ message: 'Success' });
 });
