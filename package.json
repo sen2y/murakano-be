@@ -18,25 +18,26 @@
   },
   "homepage": "https://github.com/Murakano/murakano-be#readme",
   "dependencies": {
-        "bcrypt": "^5.1.1",
-        "cookie-parser": "^1.4.6",
-        "cors": "^2.8.5",
-        "dotenv": "^16.4.5",
-        "express": "^4.19.2",
-        "helmet": "^7.1.0",
-        "moment": "^2.30.1",
-        "morgan": "^1.10.0",
-        "passport": "^0.7.0",
-        "passport-local": "^1.0.0",
-        "pm2": "^5.3.1"
-    },
-    "devDependencies": {
-        "eslint": "^8.57.0",
-        "eslint-config-airbnb-base": "^15.0.0",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-prettier": "^5.1.3",
-        "nodemon": "^3.1.0",
-        "prettier": "^3.2.5"
-    }
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "moment": "^2.30.1",
+    "morgan": "^1.10.0",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "pm2": "^5.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "nodemon": "^3.1.0",
+    "prettier": "^3.2.5"
+  }
 }
