@@ -3,12 +3,11 @@ const path = require('path');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const userRouter = require('./routes/user/user.route');
-const wordRouter = require('./routes/word/word.route');
+const userRouter = require('./src/routes/user/user.route');
+const wordRouter = require('./src/routes/word/word.route');
 const cookieParser = require('cookie-parser');
-const dotenv = require('dotenv');
+const conf = require('./src/common/config/index')
 
-dotenv.config();
 
 const app = express();
 
@@ -31,7 +30,6 @@ app.all('*', (req, res) => {
     res.status(404).json(`Can't find ${req.originalUrl} on this server`)
 });
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
-    console.log(`app listening on http://localhost:${PORT}`);
+app.listen(conf.port, () => {
+    console.log(`app listening on http://localhost:${conf.port}`);
 });
