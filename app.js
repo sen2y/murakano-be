@@ -13,16 +13,7 @@ dotenv.config();
 const app = express();
 
 app.use(morgan('dev'));
-app.use(
-    helmet({
-        contentSecurityPolicy: {
-            directives: {
-                defaultSrc: ["'self'"],
-            },
-        },
-        crossOriginResourcePolicy: false,
-    })
-);
+app.use(helmet());
 
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(express.json());
