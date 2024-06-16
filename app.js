@@ -3,15 +3,12 @@ const path = require('path');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
-const appError = require('./utils/appError');
 const userRouter = require('./routes/user/user.route');
 const wordRouter = require('./routes/word/word.route');
 const cookieParser = require('cookie-parser');
-const passportConfig = require('./passport');
 const dotenv = require('dotenv');
 
 dotenv.config();
-passportConfig();
 
 const app = express();
 
@@ -39,14 +36,8 @@ app.get('/', (_, res) => {
 app.use('/users', userRouter);
 app.use('/words', wordRouter);
 
-app.all('*', (req, _, next) => {
-    next(new appError(`Can't find ${req.originalUrl} on this server`, 404));
-});
-
-app.use(function (err, _, res, next) {
-    console.log(err);
-    res.status(err.statusCode).json({ status: err.status, message: err.message });
-    next();
+app.all('*', (req, res) => {
+    res.status(404).json(`Can't find ${req.originalUrl} on this server`)
 });
 
 const PORT = process.env.PORT;
