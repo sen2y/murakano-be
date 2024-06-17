@@ -5,6 +5,8 @@ const wordRouter = require('./word/word.route');
 
 const router = Router();
 
+// TODO : swagger
+
 router.use('/users', userRouter);
 
 router.use('/words', wordRouter);
