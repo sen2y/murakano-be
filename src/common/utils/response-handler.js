@@ -65,7 +65,7 @@ const sendResponse = {
         } else if (Array.isArray(err)) {
             res.status(HTTP_STATUS_CODE.BAD_REQUEST).json(err.length == 1 ? err[0] : err);
         } else {
-            res.status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR).json(ErrorMessage.INTERNAL_SERVER_ERROR);
+            res.status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR).json({ message: ErrorMessage.INTERNAL_SERVER_ERROR });
         }
 
         // logging Error

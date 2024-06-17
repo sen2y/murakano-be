@@ -8,3 +8,13 @@ exports.createUser = async (userData) => {
         console.log(err);
     }
 };
+
+exports.findUserByNickname = async (nickname) => {
+    const userExists = await User.exists({ nickname });
+    return userExists ? true : false;
+};
+
+exports.findUserByEmail = async (email) => {
+    const userExists = await User.exists({ email });
+    return userExists ? true : false;
+};

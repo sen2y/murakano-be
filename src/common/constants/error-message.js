@@ -17,6 +17,10 @@ const ErrorMessage = Object.freeze({
 
     // USER
     REGISTER_ERROR: '회원가입중 오류가 발생하였습니다.',
+    NICKNAME_CHECK_ERROR: '닉네임 중복검사중 오류가 발생하였습니다.',
+    EMAIL_CHECK_ERROR: '이메일 중복검사중 오류가 발생하였습니다.',
+    EXIST_NICKNAME: '이미 존재하는 닉네임 입니다.',
+    EXIST_EMAIL: '이미 존재하는 이메일 입니다.',
 });
 
 module.exports = ErrorMessage;
