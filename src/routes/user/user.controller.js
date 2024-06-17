@@ -2,10 +2,11 @@ const userService = require('./user.service');
 const sendResponse = require('../../common/utils/response-handler');
 const ErrorMessage = require('../../common/constants/error-message');
 const SucesssMessage = require('../../common/constants/success-message');
-
-// TODO : controller에서 validation 필요
+const { validateRequest } = require('../../common/utils/request.validator');
+const { nicknameCheckReqQuerySchema } = require('./user.schema');
 
 exports.register = async (req, res) => {
+    // TODO : validation 적용
     try {
         const newUser = await userService.register(req.body);
 
@@ -21,7 +22,9 @@ exports.register = async (req, res) => {
 
 exports.isNicknameExist = async (req, res) => {
     try {
-        const isUserExist = await userService.isNicknameExist(req.query.nickname);
+        const { nickname } = validateRequest(nicknameCheckReqQuerySchema, req.query);
+
+        const isUserExist = await userService.isNicknameExist(nickname);
         data = { isUserExist };
 
         if (isUserExist) {
@@ -36,11 +39,15 @@ exports.isNicknameExist = async (req, res) => {
             data,
         });
     } catch (err) {
+        if (err?.type) {
+            return sendResponse.badRequest(res, err.message);
+        }
         sendResponse.fail(req, res, ErrorMessage.NICKNAME_CHECK_ERROR);
     }
 };
 
 exports.isEmailExist = async (req, res) => {
+    // TODO : validation 적용
     try {
         const isUserExist = await userService.isEmailExist(req.query.email);
         data = { isUserExist };

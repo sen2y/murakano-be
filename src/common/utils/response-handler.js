@@ -31,9 +31,9 @@ const sendResponse = {
     badRequest: (res, dto) => {
         if (dto) {
             res.type('application/json');
-            return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json(dto);
+            return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({ message: dto });
         } else {
-            return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json(ErrorMessage.BAD_REQUEST);
+            return res.status(HTTP_STATUS_CODE.BAD_REQUEST).json({ message: ErrorMessage.BAD_REQUEST });
         }
     },
 
