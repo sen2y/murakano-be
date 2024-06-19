@@ -1,7 +1,6 @@
 const dotenv = require('dotenv');
-const path = require('path');
 
-const env = dotenv.config({ path: path.resolve(__dirname, './env/.env') });
+const env = dotenv.config();
 if (env.error) {
     console.warn('.env 파일을 찾을 수 없습니다.');
 }
