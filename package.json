@@ -20,6 +20,7 @@
     "homepage": "https://github.com/Murakano/murakano-be#readme",
     "dependencies": {
         "ajv": "^8.16.0",
+        "ajv-formats": "^3.0.1",
         "bcrypt": "^5.1.1",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
