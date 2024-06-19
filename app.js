@@ -1,37 +1,17 @@
 const express = require('express');
-const path = require('path');
-const morgan = require('morgan');
-const helmet = require('helmet');
-const cors = require('cors');
-const userRouter = require('./routes/user/user.route');
-const wordRouter = require('./routes/word/word.route');
-const cookieParser = require('cookie-parser');
-const dotenv = require('dotenv');
-
-dotenv.config();
+const conf = require('./src/common/config/index');
+const expressLoader = require('./src/common/modules/express');
+const initDB = require('./src/common/modules/mongodb');
 
 const app = express();
 
-app.use(morgan('dev'));
-app.use(helmet());
+const initServer = async () => {
+    expressLoader(app);
 
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+    await initDB();
+    app.listen(conf.port, () => {
+        console.log(`app listening on http://localhost:${conf.port}`);
+    });
+};
 
-// EB health check
-app.get('/', (_, res) => {
-    res.status(200).json({ message: 'Success' });
-});
-app.use('/users', userRouter);
-app.use('/words', wordRouter);
-
-app.all('*', (req, res) => {
-    res.status(404).json(`Can't find ${req.originalUrl} on this server`)
-});
-
-const PORT = process.env.PORT;
-app.listen(PORT, () => {
-    console.log(`app listening on http://localhost:${PORT}`);
-});
+initServer();
