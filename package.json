@@ -4,7 +4,8 @@
     "description": "개발 용어 발음 검색 서비스 \"머라카노\"의 백엔드 레포지토리 입니다.",
     "main": "app.js",
     "scripts": {
-        "start": "nodemon app.js",
+        "start": "node ./node_modules/pm2/bin/pm2 start app.js",
+        "poststart": "node ./node_modules/pm2/bin/pm2 logs",
         "dev": "nodemon app.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "lint": "eslint .",
