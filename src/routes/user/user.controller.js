@@ -1,9 +1,19 @@
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
+
 const userService = require('./user.service');
 const sendResponse = require('../../common/utils/response-handler');
 const ErrorMessage = require('../../common/constants/error-message');
 const SucesssMessage = require('../../common/constants/success-message');
 const { validateRequest } = require('../../common/utils/request.validator');
-const { nicknameCheckReqQuerySchema, registerBodySchema, emailCheckReqQuerySchema } = require('./user.schema');
+const {
+    nicknameCheckReqQuerySchema,
+    registerBodySchema,
+    emailCheckReqQuerySchema,
+    loginBodySchema,
+} = require('./user.schema');
+const config = require('../../common/config');
+const { generateToken } = require('../../common/utils/auth');
 
 exports.register = async (req, res) => {
     try {
@@ -73,4 +83,47 @@ exports.isEmailExist = async (req, res) => {
         }
         sendResponse.fail(req, res, ErrorMessage.EMAIL_CHECK_ERROR);
     }
+};
+
+// const { email, password } = validateRequest(loginBodySchema, req.body);
+// exports.localLogin = async (req, res) => {
+
+//     passport.authenticate('local', (authError, user, info) => {
+//         if (authError) {
+//             console.error(authError);
+//             return next(authError);
+//         }
+//         if (!user) {
+//             return sendResponse.unAuthorized(res, { message: info.message });
+//         }
+//         return req.login(user, (loginError) => {
+//             if (loginError) {
+//                 console.error(loginError);
+//                 return next(loginError);
+//             }
+//             return sendResponse.ok(res, {
+//                 message: SucesssMessage.LOGIN_SUCCESSS,
+//                 user_id: user._id,
+//             });
+//         });
+//     })(req, res, next);
+// };
+
+exports.localLogin = async (req, res, next) => {
+    passport.authenticate('local', (authError, user, info) => {
+        if (authError) {
+            console.error(authError);
+            return next(authError);
+        }
+        if (!user) {
+            return sendResponse.unAuthorized(res, { message: info.message });
+        }
+
+        const token = generateToken(user);
+
+        return sendResponse.ok(res, {
+            message: SucesssMessage.LOGIN_SUCCESSS,
+            token,
+        });
+    })(req, res, next);
 };

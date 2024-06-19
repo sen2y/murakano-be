@@ -1,0 +1,27 @@
+const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
+const passport = require('passport');
+const User = require('../../routes/user/user.model');
+const config = require('../config'); // 비밀 키를 저장한 파일
+
+const opts = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: config.jwtSecret,
+};
+
+module.exports = () => {
+    passport.use(
+        new JwtStrategy(opts, async (jwtPayload, done) => {
+            try {
+                const user = await User.findById(jwtPayload.id);
+                if (user) {
+                    return done(null, user);
+                } else {
+                    return done(null, false);
+                }
+            } catch (error) {
+                console.error(error);
+                return done(error, false);
+            }
+        })
+    );
+};

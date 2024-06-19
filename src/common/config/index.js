@@ -12,6 +12,8 @@ const conf = {
     port: process.env.PORT,
     corsWhiteList: process.env.CORS_WHITELIST,
     mongoURL: process.env.MONGO_URL,
+    jwtSecret: process.env.JWT_SECRET,
+    cookieSecret: process.env.COOKIE_SECRET,
 };
 
 module.exports = conf;

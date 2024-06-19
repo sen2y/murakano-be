@@ -1,14 +1,19 @@
 const express = require('express');
 const morgan = require('morgan');
+const passport = require('passport');
+const session = require('express-session');
 const helmet = require('helmet');
 const cors = require('cors');
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
 
-const conf = require('../../config/index');
+const conf = require('../../config');
+const passportConfig = require('../../passport');
 const router = require('../../../routes/index');
 
 module.exports = expressLoader = (app) => {
+    passportConfig();
+
     app.use(morgan('dev'));
     app.use(helmet());
 
@@ -30,6 +35,27 @@ module.exports = expressLoader = (app) => {
             },
         })(req, res, next);
     });
+
+    app.use(
+        session({
+            name: 'user',
+            resave: false,
+            saveUninitialized: false,
+            secret: conf.cookieSecret,
+            cookie: {
+                // cleint 쿠키 접근 불가
+                httpOnly: true,
+                // TODO : ssl 적용하면 true로 변경
+                secure: false,
+                // 24h
+                maxAge: 86400000,
+            },
+        })
+    );
+
+    // Passport 세팅
+    app.use(passport.initialize());
+    app.use(passport.session());
 
     // Body Parser 세팅
     app.use(
