@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, isNicknameExist, isEmailExist, localLogin } = require('./user.controller');
+const { register, isNicknameExist, isEmailExist, localLogin, kakaoLogin, getProfile } = require('./user.controller');
 const { isLoggedIn, isNotLoggedIn } = require('../../common/utils/auth');
 const userRouter = express.Router();
 
@@ -10,10 +10,8 @@ userRouter.get('/check/email', isEmailExist);
 
 // 로그인
 userRouter.post('/local/login', isNotLoggedIn, localLogin);
+userRouter.post('/kakao/login', isNotLoggedIn, kakaoLogin);
 
-// NOTE : JWT 확인용. 삭제 예정
-userRouter.get('/profile', isLoggedIn, (req, res) => {
-    res.json({ user: req.user });
-});
+userRouter.get('/profile', isLoggedIn, getProfile);
 
 module.exports = userRouter;

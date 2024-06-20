@@ -1,6 +1,7 @@
 const passport = require('passport');
-const local = require('./localStrategy');
+const localStrategy = require('./localStrategy');
 const jwtStrategy = require('./jwtStrategy');
+const User = require('../../routes/user/user.model');
 
 module.exports = () => {
     passport.serializeUser((user, done) => {
@@ -16,6 +17,7 @@ module.exports = () => {
         }
     });
 
-    local(); // LocalStrategy 초기화
-    jwtStrategy(); // JWTStrategy 초기화
+    // 초기화
+    localStrategy();
+    jwtStrategy();
 };

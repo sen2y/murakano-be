@@ -6,6 +6,8 @@ const SucesssMessage = Object.freeze({
 
     // USER - 로그인
     LOGIN_SUCCESSS: '로그인 성공',
+
+    GET_PROFILE_SUCCESS: '유저 정보 조회 성공',
 });
 
 module.exports = SucesssMessage;

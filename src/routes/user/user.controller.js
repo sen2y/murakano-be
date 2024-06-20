@@ -1,6 +1,4 @@
 const passport = require('passport');
-const jwt = require('jsonwebtoken');
-
 const userService = require('./user.service');
 const sendResponse = require('../../common/utils/response-handler');
 const ErrorMessage = require('../../common/constants/error-message');
@@ -12,8 +10,8 @@ const {
     emailCheckReqQuerySchema,
     loginBodySchema,
 } = require('./user.schema');
-const config = require('../../common/config');
 const { generateToken } = require('../../common/utils/auth');
+const { getKakaoToken, getUserInfo } = require('../../common/utils/kakao');
 
 exports.register = async (req, res) => {
     try {
@@ -85,30 +83,6 @@ exports.isEmailExist = async (req, res) => {
     }
 };
 
-// const { email, password } = validateRequest(loginBodySchema, req.body);
-// exports.localLogin = async (req, res) => {
-
-//     passport.authenticate('local', (authError, user, info) => {
-//         if (authError) {
-//             console.error(authError);
-//             return next(authError);
-//         }
-//         if (!user) {
-//             return sendResponse.unAuthorized(res, { message: info.message });
-//         }
-//         return req.login(user, (loginError) => {
-//             if (loginError) {
-//                 console.error(loginError);
-//                 return next(loginError);
-//             }
-//             return sendResponse.ok(res, {
-//                 message: SucesssMessage.LOGIN_SUCCESSS,
-//                 user_id: user._id,
-//             });
-//         });
-//     })(req, res, next);
-// };
-
 exports.localLogin = async (req, res, next) => {
     try {
         req.body = validateRequest(loginBodySchema, req.body);
@@ -120,7 +94,6 @@ exports.localLogin = async (req, res, next) => {
             if (!user) {
                 return sendResponse.unAuthorized(res, { message: info.message });
             }
-
             const token = generateToken(user);
 
             return sendResponse.ok(res, {
@@ -134,4 +107,37 @@ exports.localLogin = async (req, res, next) => {
         }
         sendResponse.fail(req, res, ErrorMessage.LOGIN_ERROR);
     }
+};
+
+exports.kakaoLogin = async (req, res) => {
+    try {
+        const { code } = req.body;
+
+        const { accessToken } = await getKakaoToken(code);
+        const { snsId, email, nickname } = await getUserInfo(accessToken);
+
+        const kakaoUser = { snsId: snsId, email, nickname, provider: 'kakao' };
+
+        let user = await userService.isKaKaoUserExist(kakaoUser.snsId);
+        if (!user) {
+            user = await userService.kakaoRegister(kakaoUser);
+        }
+        const token = generateToken(user);
+        sendResponse.ok(res, {
+            message: SucesssMessage.LOGIN_SUCCESSS,
+            token,
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.KAKAO_LOGIN_ERROR);
+    }
+};
+
+exports.getProfile = (req, res) => {
+    const { _id, nickname, email } = req.user;
+    const data = { _id, nickname, email };
+    sendResponse.ok(res, {
+        message: SucesssMessage.GET_PROFILE_SUCCESS,
+        data,
+    });
 };
