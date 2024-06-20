@@ -110,20 +110,28 @@ exports.isEmailExist = async (req, res) => {
 // };
 
 exports.localLogin = async (req, res, next) => {
-    passport.authenticate('local', (authError, user, info) => {
-        if (authError) {
-            console.error(authError);
-            return next(authError);
-        }
-        if (!user) {
-            return sendResponse.unAuthorized(res, { message: info.message });
-        }
+    try {
+        req.body = validateRequest(loginBodySchema, req.body);
+        passport.authenticate('local', (authError, user, info) => {
+            if (authError) {
+                console.error(authError);
+                return next(authError);
+            }
+            if (!user) {
+                return sendResponse.unAuthorized(res, { message: info.message });
+            }
 
-        const token = generateToken(user);
+            const token = generateToken(user);
 
-        return sendResponse.ok(res, {
-            message: SucesssMessage.LOGIN_SUCCESSS,
-            token,
-        });
-    })(req, res, next);
+            return sendResponse.ok(res, {
+                message: SucesssMessage.LOGIN_SUCCESSS,
+                token,
+            });
+        })(req, res, next);
+    } catch (err) {
+        if (err?.type) {
+            return sendResponse.badRequest(res, err.message);
+        }
+        sendResponse.fail(req, res, ErrorMessage.LOGIN_ERROR);
+    }
 };
