@@ -28,7 +28,7 @@ module.exports = expressLoader = (app) => {
         cors({
             credentials: true,
             origin: (origin, callback) => {
-                if (origin !== null || conf.corsWhiteList?.indexOf(origin) !== -1) {
+                if (origin === undefined || (origin && conf.corsWhiteList?.indexOf(origin) !== -1)) {
                     return callback(null, true);
                 }
                 callback(new Error('CORS ERROR'));
