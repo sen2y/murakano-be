@@ -1,7 +1,7 @@
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 const passport = require('passport');
 const User = require('../../routes/user/user.model');
-const config = require('../config'); // 비밀 키를 저장한 파일
+const config = require('../config');
 
 const opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
