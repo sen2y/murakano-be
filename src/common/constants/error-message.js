@@ -21,6 +21,8 @@ const ErrorMessage = Object.freeze({
     EMAIL_CHECK_ERROR: '이메일 중복검사중 오류가 발생하였습니다.',
     EXIST_NICKNAME: '이미 존재하는 닉네임 입니다.',
     EXIST_EMAIL: '이미 존재하는 이메일 입니다.',
+    LOGIN_ERROR: '로그인중 오류가 발생하였습니다.',
+    KAKAO_LOGIN_ERROR: '카카오 로그인중 오류가 발생하였습니다.',
 });
 
 module.exports = ErrorMessage;

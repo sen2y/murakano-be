@@ -12,6 +12,12 @@ const conf = {
     port: process.env.PORT,
     corsWhiteList: process.env.CORS_WHITELIST,
     mongoURL: process.env.MONGO_URL,
+    jwtSecret: process.env.JWT_SECRET,
+    cookieSecret: process.env.COOKIE_SECRET,
+
+    // social login
+    kakaoRestApiKey: process.env.KAKAO_REST_API_KEY,
+    kakaoCallback: process.env.KAKAO_CALLBACK,
 };
 
 module.exports = conf;
