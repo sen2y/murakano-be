@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const config = require('../config');
 
+// JWT 토큰 생성 함수
 exports.generateToken = (user) => {
     return jwt.sign(
         {
@@ -14,44 +15,60 @@ exports.generateToken = (user) => {
     );
 };
 
+// JWT 토큰 검증 함수
 exports.verifyToken = (token) => {
     return jwt.verify(token, config.jwtSecret);
 };
 
-exports.isAuthenticated = (req, res, next) => {
-    passport.authenticate('jwt', { session: false }, (err, user, info) => {
-        if (err) {
-            return res.status(500).json({ message: '서버 오류' });
-        }
-        if (!user) {
-            return res.status(401).json({ message: '인증되지 않은 사용자' });
-        }
-        req.user = user;
-        next();
-    })(req, res, next);
+// JWT 인증 함수
+const authenticateJWT = (req, res) => {
+    return new Promise((resolve, reject) => {
+        passport.authenticate('jwt', { session: false }, (err, user, info) => {
+            if (err) {
+                return reject({ status: 500, message: '서버 오류', error: err.message });
+            }
+            if (info) {
+                switch (info.name) {
+                    case 'TokenExpiredError':
+                        return reject({ status: 401, message: '토큰이 만료되었습니다.', expiredAt: info.expiredAt });
+                    case 'JsonWebTokenError':
+                        return reject({ status: 401, message: '유효하지 않은 토큰입니다.' });
+                    default:
+                        return reject({ status: 401, message: '인증되지 않은 사용자' });
+                }
+            }
+            if (!user) {
+                return reject({ status: 401, message: '로그인이 필요합니다.' });
+            }
+            resolve(user);
+        })(req, res);
+    });
 };
 
-exports.isLoggedIn = (req, res, next) => {
-    passport.authenticate('jwt', { session: false }, (err, user, info) => {
-        if (err) {
-            return res.status(500).json({ message: '서버 오류' });
-        }
-        if (!user) {
-            return res.status(401).json({ message: '로그인이 필요합니다.' });
-        }
+// 로그인 여부 확인 미들웨어
+exports.isLoggedIn = async (req, res, next) => {
+    try {
+        const user = await authenticateJWT(req, res);
         req.user = user;
         next();
-    })(req, res, next);
+    } catch (error) {
+        res.status(error.status).json({
+            message: error.message,
+            ...(error.expiredAt && { expiredAt: error.expiredAt }),
+        });
+    }
 };
 
-exports.isNotLoggedIn = (req, res, next) => {
-    passport.authenticate('jwt', { session: false }, (err, user, info) => {
-        if (err) {
-            return res.status(500).json({ message: '서버 오류' });
+// 비로그인 여부 확인 미들웨어
+exports.isNotLoggedIn = async (req, res, next) => {
+    try {
+        await authenticateJWT(req, res);
+        res.status(403).json({ message: '이미 로그인된 상태입니다.' });
+    } catch (error) {
+        if (error.status === 401) {
+            next();
+        } else {
+            res.status(error.status).json({ message: error.message });
         }
-        if (user) {
-            return res.status(403).json({ message: '이미 로그인된 상태입니다.' });
-        }
-        next();
-    })(req, res, next);
+    }
 };
