@@ -18,3 +18,8 @@ exports.findUserByEmail = async (email) => {
     const userExists = await User.exists({ email });
     return userExists ? true : false;
 };
+
+exports.getUserBySnsId = async (snsId) => {
+    const user = await User.findOne({ snsId, provider: 'kakao' });
+    return user;
+};

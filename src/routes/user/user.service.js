@@ -1,13 +1,15 @@
-const bcrypt = require('bcrypt');
 const userRepository = require('./user.repository');
 
 exports.register = async (userData) => {
-    const hash = await bcrypt.hash(userData.password, 12);
     const newUser = {
         email: userData.email,
-        password: hash,
+        password: userData.password,
         nickname: userData.nickname,
     };
+    return await userRepository.createUser(newUser);
+};
+
+exports.kakaoRegister = async (newUser) => {
     return await userRepository.createUser(newUser);
 };
 
@@ -19,4 +21,9 @@ exports.isNicknameExist = async (nickname) => {
 exports.isEmailExist = async (email) => {
     const isUserExist = await userRepository.findUserByEmail(email);
     return isUserExist;
+};
+
+exports.isKaKaoUserExist = async (snsId) => {
+    const user = await userRepository.getUserBySnsId(snsId);
+    return user;
 };

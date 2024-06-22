@@ -1,6 +1,8 @@
 const ErrorMessage = require('../../common/constants/error-message');
 const Ajv = require('ajv');
+const addFormats = require('ajv-formats');
 const ajv = new Ajv();
+addFormats(ajv);
 
 exports.validateRequest = (schema, req) => {
     const validate = ajv.compile(schema);
