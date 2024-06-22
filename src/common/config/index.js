@@ -17,7 +17,6 @@ const conf = {
 
     // social login
     kakaoRestApiKey: process.env.KAKAO_REST_API_KEY,
-    kakaoCallback: process.env.KAKAO_CALLBACK,
 };
 
 module.exports = conf;
