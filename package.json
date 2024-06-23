@@ -1,0 +1,51 @@
+{
+    "name": "murakano-be",
+    "version": "1.0.0",
+    "description": "개발 용어 발음 검색 서비스 \"머라카노\"의 백엔드 레포지토리 입니다.",
+    "main": "app.js",
+    "scripts": {
+        "start": "node ./node_modules/pm2/bin/pm2 start app.js",
+        "poststart": "node ./node_modules/pm2/bin/pm2 logs",
+        "dev": "nodemon app.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write ."
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Murakano/murakano-be/issues"
+    },
+    "homepage": "https://github.com/Murakano/murakano-be#readme",
+    "dependencies": {
+        "ajv": "^8.16.0",
+        "ajv-formats": "^3.0.1",
+        "axios": "^1.7.2",
+        "bcrypt": "^5.1.1",
+        "cookie-parser": "^1.4.6",
+        "cors": "^2.8.5",
+        "crypto": "^1.0.1",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2",
+        "express-session": "^1.18.0",
+        "helmet": "^7.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "moment": "^2.30.1",
+        "mongoose": "^8.4.3",
+        "morgan": "^1.10.0",
+        "nodemon": "^3.1.0",
+        "passport": "^0.7.0",
+        "passport-jwt": "^4.0.1",
+        "passport-local": "^1.0.0",
+        "pm2": "^5.3.1"
+    },
+    "devDependencies": {
+        "eslint": "^8.57.0",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-prettier": "^5.1.3",
+        "prettier": "^3.2.5"
+    }
+}
