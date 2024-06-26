@@ -127,7 +127,7 @@ exports.kakaoLogin = async (req, res) => {
         sendResponse.ok(res, {
             message: SucesssMessage.LOGIN_SUCCESSS,
             token,
-            nickname: user.nickname,
+            nickname,
         });
     } catch (err) {
         console.log(err);
