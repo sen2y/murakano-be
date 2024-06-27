@@ -99,6 +99,7 @@ exports.localLogin = async (req, res, next) => {
             return sendResponse.ok(res, {
                 message: SucesssMessage.LOGIN_SUCCESSS,
                 token,
+                nickname: user.nickname,
             });
         })(req, res, next);
     } catch (err) {
@@ -126,6 +127,7 @@ exports.kakaoLogin = async (req, res) => {
         sendResponse.ok(res, {
             message: SucesssMessage.LOGIN_SUCCESSS,
             token,
+            nickname,
         });
     } catch (err) {
         console.log(err);
