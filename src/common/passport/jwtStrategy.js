@@ -5,7 +5,7 @@ const config = require('../config');
 
 const opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: config.jwtSecret,
+    secretOrKey: config.jwtAccessSecret,
 };
 
 module.exports = () => {
