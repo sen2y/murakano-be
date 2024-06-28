@@ -1,4 +1,7 @@
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
+const config = require('../../common/config');
+
 const userService = require('./user.service');
 const sendResponse = require('../../common/utils/response-handler');
 const ErrorMessage = require('../../common/constants/error-message');
@@ -10,7 +13,7 @@ const {
     emailCheckReqQuerySchema,
     loginBodySchema,
 } = require('./user.schema');
-const { generateToken } = require('../../common/utils/auth');
+const { generateAccessToken, generateRefreshToken } = require('../../common/utils/auth');
 const { getKakaoToken, getUserInfo } = require('../../common/utils/kakao');
 
 exports.register = async (req, res) => {
@@ -94,12 +97,14 @@ exports.localLogin = async (req, res, next) => {
             if (!user) {
                 return sendResponse.unAuthorized(res, { message: info.message });
             }
-            const token = generateToken(user);
+
+            const accessToken = generateAccessToken(user);
+            const refreshToken = generateRefreshToken(user);
+            res.cookie('accessToken', accessToken, { httpOnly: false, maxAge: 10 * 60 * 1000 });
+            res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
 
             return sendResponse.ok(res, {
                 message: SucesssMessage.LOGIN_SUCCESSS,
-                token,
-                nickname: user.nickname,
             });
         })(req, res, next);
     } catch (err) {
@@ -113,9 +118,8 @@ exports.localLogin = async (req, res, next) => {
 exports.kakaoLogin = async (req, res) => {
     try {
         const { code } = req.body;
-
-        const { accessToken } = await getKakaoToken(code);
-        const { snsId, email, nickname } = await getUserInfo(accessToken);
+        const { kakaoAccessToken } = await getKakaoToken(code);
+        const { snsId, email, nickname } = await getUserInfo(kakaoAccessToken);
 
         const kakaoUser = { snsId: snsId, email, nickname, provider: 'kakao' };
 
@@ -123,16 +127,44 @@ exports.kakaoLogin = async (req, res) => {
         if (!user) {
             user = await userService.kakaoRegister(kakaoUser);
         }
-        const token = generateToken(user);
+
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+        res.cookie('accessToken', accessToken, { httpOnly: false, maxAge: 10 * 60 * 1000 });
+        res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+
         sendResponse.ok(res, {
             message: SucesssMessage.LOGIN_SUCCESSS,
-            token,
-            nickname,
         });
     } catch (err) {
-        console.log(err);
         sendResponse.fail(req, res, ErrorMessage.KAKAO_LOGIN_ERROR);
     }
+};
+
+exports.refreshToken = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+        // NOTE : 로그인 하지 않은 유저도 refresh token이 없는 경우에 해당하기 때문에, ok로 응답
+        console.log(ErrorMessage.NO_REFRESH_TOKEN);
+        return sendResponse.ok(res, {
+            message: ErrorMessage.NO_REFRESH_TOKEN,
+        });
+    }
+
+    jwt.verify(refreshToken, config.jwtRefreshSecret, (err, user) => {
+        if (err) return res.sendStatus(403);
+
+        const newAccessToken = generateAccessToken({ _id: user.userId, nickname: user.nickname, email: user.email });
+        const newRefreshToken = generateRefreshToken({ _id: user.userId, nickname: user.nickname, email: user.email });
+
+        res.cookie('accessToken', newAccessToken, { httpOnly: false, maxAge: 10 * 60 * 1000 });
+        res.cookie('refreshToken', newRefreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+
+        sendResponse.ok(res, {
+            message: SucesssMessage.REFRESH_TOKEN,
+            accessToken: newAccessToken,
+        });
+    });
 };
 
 exports.getProfile = (req, res) => {
@@ -141,5 +173,12 @@ exports.getProfile = (req, res) => {
     sendResponse.ok(res, {
         message: SucesssMessage.GET_PROFILE_SUCCESS,
         data,
+    });
+};
+
+exports.logout = (_, res) => {
+    res.cookie('refreshToken', '', { httpOnly: true, maxAge: 0 });
+    return sendResponse.ok(res, {
+        message: SucesssMessage.LOGOUT_SUCCESS,
     });
 };

@@ -23,6 +23,7 @@ const ErrorMessage = Object.freeze({
     EXIST_EMAIL: '이미 존재하는 이메일 입니다.',
     LOGIN_ERROR: '로그인중 오류가 발생하였습니다.',
     KAKAO_LOGIN_ERROR: '카카오 로그인중 오류가 발생하였습니다.',
+    NO_REFRESH_TOKEN: 'refresh token이 존재하지 않습니다.',
 });
 
 module.exports = ErrorMessage;
