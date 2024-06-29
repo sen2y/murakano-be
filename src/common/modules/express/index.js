@@ -45,7 +45,7 @@ module.exports = expressLoader = (app) => {
             cookie: {
                 // cleint 쿠키 접근 불가
                 httpOnly: true,
-                // TODO : ssl 적용하면 true로 변경
+                // TODO : prod = true , dev = false 로 변경
                 secure: false,
                 // 24h
                 maxAge: 86400000,

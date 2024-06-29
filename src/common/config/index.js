@@ -9,15 +9,20 @@ if (env.error) {
 }
 
 const conf = {
+    // server
     port: process.env.PORT,
     corsWhiteList: process.env.CORS_WHITELIST,
+
+    // database
     mongoURL: process.env.MONGO_URL,
-    jwtSecret: process.env.JWT_SECRET,
+
+    // jwt
+    jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
+    jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
     cookieSecret: process.env.COOKIE_SECRET,
 
     // social login
     kakaoRestApiKey: process.env.KAKAO_REST_API_KEY,
-    kakaoCallback: process.env.KAKAO_CALLBACK,
 };
 
 module.exports = conf;

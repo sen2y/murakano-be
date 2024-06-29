@@ -2,22 +2,16 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const config = require('../config');
 
-// JWT 토큰 생성 함수
-exports.generateToken = (user) => {
-    return jwt.sign(
-        {
-            id: user._id,
-            email: user.email,
-            nickname: user.nickname,
-        },
-        config.jwtSecret,
-        { expiresIn: '24h' }
-    );
+exports.generateAccessToken = (user) => {
+    return jwt.sign({ userId: user._id, nickname: user.nickname, email: user.email }, config.jwtAccessSecret, {
+        expiresIn: '10m',
+    });
 };
 
-// JWT 토큰 검증 함수
-exports.verifyToken = (token) => {
-    return jwt.verify(token, config.jwtSecret);
+exports.generateRefreshToken = (user) => {
+    return jwt.sign({ userId: user._id, nickname: user.nickname, email: user.email }, config.jwtRefreshSecret, {
+        expiresIn: '24h',
+    });
 };
 
 // JWT 인증 함수

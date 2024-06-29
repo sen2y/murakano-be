@@ -12,30 +12,28 @@ exports.getKakaoToken = async (code) => {
             client_id: conf.kakaoRestApiKey,
             code,
         };
-
         const queryString = Object.keys(data)
             .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(data[k]))
             .join('&');
 
         const token = await axios.post('https://kauth.kakao.com/oauth/token', queryString, { headers: header });
-        return { accessToken: token.data.access_token };
+        return { kakaoAccessToken: token.data.access_token };
     } catch (err) {
         console.log(err);
     }
 };
-exports.getUserInfo = async (accessToken) => {
+exports.getUserInfo = async (kakaoAccessToken) => {
     try {
         const header = {
             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
             Authorization: 'Bearer ',
         };
         // Authorization: 'Bearer access_token'
-        header.Authorization += accessToken;
+        header.Authorization += kakaoAccessToken;
 
         // 카카오 사용자 정보 조회
         const get = await axios.get('https://kapi.kakao.com/v2/user/me', { headers: header });
         const result = get.data;
-
         return {
             snsId: result.id,
             email: result.kakao_account.email ? result.kakao_account.email : `${result.id}@no.agreement`,
