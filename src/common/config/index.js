@@ -25,4 +25,38 @@ const conf = {
     kakaoRestApiKey: process.env.KAKAO_REST_API_KEY,
 };
 
+switch (process.env.NODE_ENV) {
+    case 'production':
+        conf.cookieInAccessTokenOptions = {
+            httpOnly: false,
+            maxAge: 10 * 60 * 1000,
+            sameSite: 'Lax',
+            secure: true,
+        };
+        conf.cookieInRefreshTokenOptions = {
+            httpOnly: true,
+            maxAge: 10 * 60 * 1000,
+            sameSite: 'Lax',
+            secure: true,
+        };
+        conf.envMode = 'prod';
+        break;
+    case 'development':
+        conf.cookieInAccessTokenOptions = {
+            httpOnly: false,
+            maxAge: 10 * 60 * 1000,
+            sameSite: 'Lax',
+        };
+        conf.cookieInRefreshTokenOptions = {
+            httpOnly: true,
+            maxAge: 10 * 60 * 1000,
+            sameSite: 'Lax',
+        };
+        1;
+        conf.envMode = 'dev';
+        break;
+    default:
+        console.error('NODE_ENV is not set correctly. It should be either production or development');
+}
+
 module.exports = conf;

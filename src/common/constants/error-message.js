@@ -24,6 +24,7 @@ const ErrorMessage = Object.freeze({
     LOGIN_ERROR: '로그인중 오류가 발생하였습니다.',
     KAKAO_LOGIN_ERROR: '카카오 로그인중 오류가 발생하였습니다.',
     NO_REFRESH_TOKEN: 'refresh token이 존재하지 않습니다.',
+    REFRESH_TOKEN_ERROR: 'refresh token 검증중 오류가 발생하였습니다.',
 });
 
 module.exports = ErrorMessage;
