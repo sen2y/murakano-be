@@ -182,8 +182,8 @@ exports.getProfile = (req, res) => {
 };
 
 exports.logout = (_, res) => {
-    res.cookie('accessToken', '', { ...config.cookieInAccessTokenOptions, maxAge: 0 });
-    res.cookie('refreshToken', '', { ...config.cookieInRefreshTokenOptions, maxAge: 0 });
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
     return sendResponse.ok(res, {
         message: SucesssMessage.LOGOUT_SUCCESS,
     });
