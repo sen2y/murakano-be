@@ -35,7 +35,7 @@ switch (process.env.NODE_ENV) {
         };
         conf.cookieInRefreshTokenOptions = {
             httpOnly: true,
-            maxAge: 10 * 60 * 1000,
+            maxAge: 60 * 60 * 1000,
             sameSite: 'Lax',
             secure: true,
         };
@@ -49,7 +49,7 @@ switch (process.env.NODE_ENV) {
         };
         conf.cookieInRefreshTokenOptions = {
             httpOnly: true,
-            maxAge: 10 * 60 * 1000,
+            maxAge: 60 * 60 * 1000,
             sameSite: 'Lax',
         };
         1;
