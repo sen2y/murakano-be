@@ -179,13 +179,13 @@ exports.refreshToken = async (req, res) => {
         const newAccessToken = generateAccessToken({ _id: user.userId, nickname: user.nickname, email: user.email });
         const newRefreshToken = generateRefreshToken({ _id: user.userId, nickname: user.nickname, email: user.email });
 
-        res.cookie('accessToken', accessToken, {
+        res.cookie('accessToken', newAccessToken, {
             httpOnly: false,
             maxAge: 10 * 60 * 1000,
             sameSite: 'None',
             secure: true,
         });
-        res.cookie('refreshToken', refreshToken, {
+        res.cookie('refreshToken', newRefreshToken, {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000,
             sameSite: 'None',
@@ -194,7 +194,7 @@ exports.refreshToken = async (req, res) => {
 
         sendResponse.ok(res, {
             message: SucesssMessage.REFRESH_TOKEN,
-            accessToken: newAccessToken,
+            newAccessToken: newAccessToken,
             newRefreshToken: newRefreshToken,
         });
     });
