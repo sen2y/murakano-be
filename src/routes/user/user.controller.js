@@ -100,8 +100,10 @@ exports.localLogin = async (req, res, next) => {
 
             const accessToken = generateAccessToken(user);
             const refreshToken = generateRefreshToken(user);
-            res.cookie('accessToken', accessToken, { httpOnly: false, maxAge: 10 * 60 * 1000 });
-            res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+
+            // production 환경에서는 secure 필요 혹은 LAX로 변경, 쿠키와 토큰 주기 변경
+            res.cookie('accessToken', accessToken, { httpOnly: false, maxAge: 10 * 60 * 1000, sameSite: 'None' });
+            res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: 'None' });
 
             return sendResponse.ok(res, {
                 message: SucesssMessage.LOGIN_SUCCESSS,
@@ -130,8 +132,8 @@ exports.kakaoLogin = async (req, res) => {
 
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
-        res.cookie('accessToken', accessToken, { httpOnly: false, maxAge: 10 * 60 * 1000 });
-        res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+        res.cookie('accessToken', accessToken, { httpOnly: false, maxAge: 10 * 60 * 1000, sameSite: 'None' });
+        res.cookie('refreshToken', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: 'None' });
 
         sendResponse.ok(res, {
             message: SucesssMessage.LOGIN_SUCCESSS,
