@@ -48,7 +48,6 @@ exports.isLoggedIn = async (req, res, next) => {
     } catch (error) {
         res.status(error.status).json({
             message: error.message,
-            ...(error.expiredAt && { expiredAt: error.expiredAt }),
         });
     }
 };
@@ -59,6 +58,7 @@ exports.isNotLoggedIn = async (req, res, next) => {
         await authenticateJWT(req, res);
         res.status(403).json({ message: '이미 로그인된 상태입니다.' });
     } catch (error) {
+        // NOTE : 인증되지 않은 사용자인 경우 통과
         if (error.status === 401) {
             next();
         } else {

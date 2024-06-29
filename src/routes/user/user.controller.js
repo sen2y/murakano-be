@@ -101,19 +101,8 @@ exports.localLogin = async (req, res, next) => {
             const accessToken = generateAccessToken(user);
             const refreshToken = generateRefreshToken(user);
 
-            // production 환경에서는 secure 필요 혹은 LAX로 변경, 쿠키와 토큰 주기 변경
-            res.cookie('accessToken', accessToken, {
-                httpOnly: false,
-                maxAge: 10 * 60 * 1000,
-                sameSite: 'None',
-                secure: true,
-            });
-            res.cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                maxAge: 24 * 60 * 60 * 1000,
-                sameSite: 'None',
-                secure: true,
-            });
+            res.cookie('accessToken', accessToken, config.cookieInAccessTokenOptions);
+            res.cookie('refreshToken', refreshToken, config.cookieInRefreshTokenOptions);
 
             return sendResponse.ok(res, {
                 message: SucesssMessage.LOGIN_SUCCESSS,
@@ -142,18 +131,8 @@ exports.kakaoLogin = async (req, res) => {
 
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
-        res.cookie('accessToken', accessToken, {
-            httpOnly: false,
-            maxAge: 10 * 60 * 1000,
-            sameSite: 'None',
-            secure: true,
-        });
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000,
-            sameSite: 'None',
-            secure: true,
-        });
+        res.cookie('accessToken', accessToken, config.cookieInAccessTokenOptions);
+        res.cookie('refreshToken', refreshToken, config.cookieInRefreshTokenOptions);
 
         sendResponse.ok(res, {
             message: SucesssMessage.LOGIN_SUCCESSS,
@@ -174,23 +153,16 @@ exports.refreshToken = async (req, res) => {
     }
 
     jwt.verify(refreshToken, config.jwtRefreshSecret, (err, user) => {
-        if (err) return res.sendStatus(403);
+        if (err)
+            return sendResponse.forbidden(res, {
+                message: ErrorMessage.REFRESH_TOKEN_ERROR,
+            });
 
         const newAccessToken = generateAccessToken({ _id: user.userId, nickname: user.nickname, email: user.email });
         const newRefreshToken = generateRefreshToken({ _id: user.userId, nickname: user.nickname, email: user.email });
 
-        res.cookie('accessToken', newAccessToken, {
-            httpOnly: false,
-            maxAge: 10 * 60 * 1000,
-            sameSite: 'None',
-            secure: true,
-        });
-        res.cookie('refreshToken', newRefreshToken, {
-            httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000,
-            sameSite: 'None',
-            secure: true,
-        });
+        res.cookie('accessToken', newAccessToken, config.cookieInAccessTokenOptions);
+        res.cookie('refreshToken', newRefreshToken, config.cookieInRefreshTokenOptions);
 
         sendResponse.ok(res, {
             message: SucesssMessage.REFRESH_TOKEN,
@@ -210,6 +182,7 @@ exports.getProfile = (req, res) => {
 };
 
 exports.logout = (_, res) => {
+    res.cookie('accessToken', '', { httpOnly: true, maxAge: 0 });
     res.cookie('refreshToken', '', { httpOnly: true, maxAge: 0 });
     return sendResponse.ok(res, {
         message: SucesssMessage.LOGOUT_SUCCESS,

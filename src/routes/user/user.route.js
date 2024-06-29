@@ -20,8 +20,8 @@ userRouter.get('/check/email', isEmailExist);
 // 로그인
 userRouter.post('/local/login', isNotLoggedIn, localLogin);
 userRouter.post('/kakao/login', isNotLoggedIn, kakaoLogin);
-userRouter.post('/refresh', isNotLoggedIn, refreshToken);
-userRouter.post('/logout', isNotLoggedIn, logout);
+userRouter.post('/refresh', refreshToken);
+userRouter.post('/logout', logout);
 
 userRouter.get('/profile', isLoggedIn, getProfile);
 
