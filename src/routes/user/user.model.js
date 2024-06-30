@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-// Request 서브 도큐먼트 스키마 정의
 const requestSchema = new mongoose.Schema(
     {
         word: { type: String, required: true },
@@ -34,9 +33,9 @@ const userSchema = new mongoose.Schema(
             match: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
         },
         password: { type: String, minLength: 8, maxLength: 20 },
-        role: { type: String, default: 'user' },
+        role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
         snsId: { type: String, default: null },
-        provider: { type: String, default: null },
+        provider: { type: String, enum: ['GOOGLE', 'KAKAO', 'NAVER'], default: null },
         recentSearches: [
             {
                 searchTerm: { type: String, required: true },
@@ -44,7 +43,7 @@ const userSchema = new mongoose.Schema(
                 deletedAt: { type: Date, default: null },
             },
         ],
-        requests: [requestSchema], // requestSchema를 포함
+        requests: [requestSchema],
     },
     { timestamps: true }
 );
