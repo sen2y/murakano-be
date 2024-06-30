@@ -199,9 +199,6 @@ exports.recentSearches = async (req, res) => {
         });
     } catch (err) {
         console.log(err);
-        if (err?.type) {
-            return sendResponse.badRequest(res, err.message);
-        }
         sendResponse.fail(req, res, ErrorMessage.RECENT_WORDS_ERROR);
     }
 };
@@ -216,9 +213,6 @@ exports.delRecentSearch = async (req, res) => {
         });
     } catch (err) {
         console.log(err);
-        if (err?.type) {
-            return sendResponse.badRequest(res, err.message);
-        }
         sendResponse.fail(req, res, ErrorMessage.DELETE_RECENT_WORD_ERROR);
     }
 };

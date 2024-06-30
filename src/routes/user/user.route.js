@@ -29,6 +29,6 @@ userRouter.get('/profile', isLoggedIn, getProfile);
 
 // 최근 검색어
 userRouter.get('/recent', isLoggedIn, recentSearches); // 최근 검색어 조회
-userRouter.delete('/del/:searchTerm', isLoggedIn, delRecentSearch); // 최근 검색어 삭제
+userRouter.delete('/:searchTerm', isLoggedIn, delRecentSearch); // 최근 검색어 삭제
 
 module.exports = userRouter;
