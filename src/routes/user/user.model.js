@@ -39,7 +39,8 @@ const userSchema = new mongoose.Schema(
         recentSearches: [
             {
                 searchTerm: { type: String, required: true },
-                lastSearched: { type: Date, default: Date.now() },
+                updatedAt: { type: Date, default: Date.now },
+                deletedAt: { type: Date, default: null },
             },
         ],
         requests: [requestSchema],
