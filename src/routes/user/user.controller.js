@@ -188,3 +188,20 @@ exports.logout = (_, res) => {
         message: SucesssMessage.LOGOUT_SUCCESS,
     });
 };
+
+exports.RecentSearches = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const recentSearches = await userService.getRecentSearches(_id);
+        sendResponse.ok(res, {
+            message: SucesssMessage.RECENT_WORDS_SUCCESS,
+            data: { recentSearches },
+        });
+    } catch (err) {
+        console.log(err);
+        if (err?.type) {
+            return sendResponse.badRequest(res, err.message);
+        }
+        sendResponse.fail(req, res, ErrorMessage.RECENT_WORDS_ERROR);
+    }
+};

@@ -8,6 +8,7 @@ const {
     getProfile,
     refreshToken,
     logout,
+    RecentSearches,
 } = require('./user.controller');
 const { isLoggedIn, isNotLoggedIn } = require('../../common/utils/auth');
 const userRouter = express.Router();
@@ -24,5 +25,8 @@ userRouter.post('/refresh', refreshToken);
 userRouter.post('/logout', logout);
 
 userRouter.get('/profile', isLoggedIn, getProfile);
+
+// 최근 검색어
+userRouter.get('/recent', isLoggedIn, RecentSearches); // 최근 검색어 조회
 
 module.exports = userRouter;

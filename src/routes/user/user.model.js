@@ -16,6 +16,13 @@ const userSchema = new mongoose.Schema(
         role: { type: String, default: 'user' },
         snsId: { type: String, default: null },
         provider: { type: String, default: null },
+        recentSearches: [
+            {
+                searchTerm: { type: String, required: true },
+                updatedAt: { type: Date, default: Date.now },
+                deletedAt: { type: Date, default: null },
+            },
+        ],
     },
     {
         timestamps: { currentTime: () => Date.now() },

@@ -27,3 +27,10 @@ exports.isKaKaoUserExist = async (snsId) => {
     const user = await userRepository.getUserBySnsId(snsId);
     return user;
 };
+
+exports.getRecentSearches = async (userId) => {
+    const recentSearches = await userRepository.getRecentSearches(userId);
+    return recentSearches;
+};
+
+exports.getRecentSearches;
