@@ -189,7 +189,7 @@ exports.logout = (_, res) => {
     });
 };
 
-exports.RecentSearches = async (req, res) => {
+exports.recentSearches = async (req, res) => {
     try {
         const { _id } = req.user;
         const recentSearches = await userService.getRecentSearches(_id);
@@ -203,5 +203,22 @@ exports.RecentSearches = async (req, res) => {
             return sendResponse.badRequest(res, err.message);
         }
         sendResponse.fail(req, res, ErrorMessage.RECENT_WORDS_ERROR);
+    }
+};
+
+exports.delRecentSearch = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const { searchTerm } = req.params;
+        await userService.delRecent(_id, searchTerm);
+        sendResponse.ok(res, {
+            message: SucesssMessage.DELETE_RECENT_WORD_SUCCESS,
+        });
+    } catch (err) {
+        console.log(err);
+        if (err?.type) {
+            return sendResponse.badRequest(res, err.message);
+        }
+        sendResponse.fail(req, res, ErrorMessage.DELETE_RECENT_WORD_ERROR);
     }
 };

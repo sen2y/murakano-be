@@ -1,6 +1,27 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+// Request 서브 도큐먼트 스키마 정의
+const requestSchema = new mongoose.Schema(
+    {
+        word: { type: String, required: true },
+        awkPron: [{ type: String }],
+        comPron: [
+            {
+                type: String,
+                required: function () {
+                    return this.type === 'MOD';
+                },
+            },
+        ],
+        info: { type: String },
+        type: { type: String, enum: ['ADD', 'MOD'], required: true },
+        status: { type: String, enum: ['PEND', 'REJ', 'APP'], default: 'PEND' },
+        deletedAt: { type: Date, default: null },
+    },
+    { timestamps: true }
+);
+
 const userSchema = new mongoose.Schema(
     {
         deletedAt: { type: Date, default: null },
@@ -23,10 +44,9 @@ const userSchema = new mongoose.Schema(
                 deletedAt: { type: Date, default: null },
             },
         ],
+        requests: [requestSchema], // requestSchema를 포함
     },
-    {
-        timestamps: { currentTime: () => Date.now() },
-    }
+    { timestamps: true }
 );
 
 userSchema.pre('save', async function (next) {

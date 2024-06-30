@@ -33,4 +33,7 @@ exports.getRecentSearches = async (userId) => {
     return recentSearches;
 };
 
-exports.getRecentSearches;
+exports.delRecent = async (userId, searchTerm) => {
+    const result = await userRepository.delRecentSearch(userId, searchTerm);
+    return result;
+};

@@ -43,3 +43,15 @@ exports.getRecentSearches = async (_id) => {
         return []; // 오류 발생 시 빈 배열 반환
     }
 };
+
+exports.delRecentSearch = async (_id, searchTerm) => {
+    try {
+        await User.findOneAndUpdate(
+            { _id, 'recentSearches.searchTerm': searchTerm, 'recentSearches.deletedAt': null },
+            { $set: { 'recentSearches.$.deletedAt': Date.now() } }
+        );
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+};
