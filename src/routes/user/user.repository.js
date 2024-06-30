@@ -52,6 +52,5 @@ exports.delRecentSearch = async (_id, searchTerm) => {
         );
     } catch (err) {
         console.error(err);
-        throw err;
     }
 };

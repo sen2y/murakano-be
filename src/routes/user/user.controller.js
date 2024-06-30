@@ -210,7 +210,7 @@ exports.delRecentSearch = async (req, res) => {
     try {
         const { _id } = req.user;
         const { searchTerm } = req.params;
-        await userService.delRecent(_id, searchTerm);
+        await userService.delRecentSearch(_id, searchTerm);
         sendResponse.ok(res, {
             message: SucesssMessage.DELETE_RECENT_WORD_SUCCESS,
         });
