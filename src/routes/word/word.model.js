@@ -12,4 +12,10 @@ const wordSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
+// 검색 시마다 검색어의 freq를 1씩 증가시키는 미들웨어
+wordSchema.pre(/^findOne/, async function (next) {
+    await this.model.updateOne(this.getQuery(), { $inc: { freq: 1 } });
+    next();
+});
+
 module.exports = mongoose.model('Word', wordSchema);

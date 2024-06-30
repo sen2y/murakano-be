@@ -15,6 +15,9 @@ const SucesssMessage = Object.freeze({
     // WORD - 최근검색어
     RECENT_WORDS_SUCCESS: '최근 검색어 조회 성공',
     DELETE_RECENT_WORD_SUCCESS: '최근 검색어 삭제 성공',
+
+    // WORD - 검색어
+    SEARCH_WORDS_SUCCESS: '검색어 조회 성공',
 });
 
 module.exports = SucesssMessage;

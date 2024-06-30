@@ -54,3 +54,30 @@ exports.delRecentSearch = async (_id, searchTerm) => {
         console.error(err);
     }
 };
+
+exports.updateRecentSearch = async (_id, searchTerm) => {
+    try {
+        const user = await User.findById(_id).exec();
+        if (!user) {
+            console.log('User not found');
+        }
+        const recentSearch = user.recentSearches.find((search) => search.searchTerm === searchTerm);
+
+        if (recentSearch) {
+            // 검색어가 이미 존재하는 경우
+            if (recentSearch.deletedAt) {
+                // deletedAt이 null이 아닌 경우, deletedAt을 null로 바꾸고 updatedAt 수정
+                recentSearch.deletedAt = null;
+            }
+            // updatedAt만 수정
+            recentSearch.updatedAt = Date.now();
+        } else {
+            // 검색어가 존재하지 않는 경우, updatedAt과 용어 추가
+            user.recentSearches.push({ searchTerm, updatedAt: Date.now() });
+        }
+
+        await user.save();
+    } catch (err) {
+        console.error(err);
+    }
+};
