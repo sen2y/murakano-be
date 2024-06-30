@@ -6,6 +6,9 @@ const SucesssMessage = Object.freeze({
 
     // USER - 로그인
     LOGIN_SUCCESSS: '로그인 성공',
+    LOGOUT_SUCCESS: '로그아웃 성공',
+
+    REFRESH_TOKEN: 'access token 발급 성공',
 
     GET_PROFILE_SUCCESS: '유저 정보 조회 성공',
 });

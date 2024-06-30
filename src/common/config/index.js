@@ -9,15 +9,54 @@ if (env.error) {
 }
 
 const conf = {
+    // server
     port: process.env.PORT,
     corsWhiteList: process.env.CORS_WHITELIST,
+
+    // database
     mongoURL: process.env.MONGO_URL,
-    jwtSecret: process.env.JWT_SECRET,
+
+    // jwt
+    jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
+    jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
     cookieSecret: process.env.COOKIE_SECRET,
 
     // social login
     kakaoRestApiKey: process.env.KAKAO_REST_API_KEY,
-    kakaoCallback: process.env.KAKAO_CALLBACK,
 };
+
+switch (process.env.NODE_ENV) {
+    case 'production':
+        conf.cookieInAccessTokenOptions = {
+            httpOnly: false,
+            maxAge: 10 * 60 * 1000,
+            sameSite: 'Lax',
+            secure: true,
+        };
+        conf.cookieInRefreshTokenOptions = {
+            httpOnly: true,
+            maxAge: 60 * 60 * 1000,
+            sameSite: 'Lax',
+            secure: true,
+        };
+        conf.envMode = 'prod';
+        break;
+    case 'development':
+        conf.cookieInAccessTokenOptions = {
+            httpOnly: false,
+            maxAge: 10 * 60 * 1000,
+            sameSite: 'Lax',
+        };
+        conf.cookieInRefreshTokenOptions = {
+            httpOnly: true,
+            maxAge: 60 * 60 * 1000,
+            sameSite: 'Lax',
+        };
+        1;
+        conf.envMode = 'dev';
+        break;
+    default:
+        console.error('NODE_ENV is not set correctly. It should be either production or development');
+}
 
 module.exports = conf;

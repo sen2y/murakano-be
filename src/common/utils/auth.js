@@ -2,22 +2,16 @@ const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const config = require('../config');
 
-// JWT 토큰 생성 함수
-exports.generateToken = (user) => {
-    return jwt.sign(
-        {
-            id: user._id,
-            email: user.email,
-            nickname: user.nickname,
-        },
-        config.jwtSecret,
-        { expiresIn: '24h' }
-    );
+exports.generateAccessToken = (user) => {
+    return jwt.sign({ userId: user._id, nickname: user.nickname, email: user.email }, config.jwtAccessSecret, {
+        expiresIn: '10m',
+    });
 };
 
-// JWT 토큰 검증 함수
-exports.verifyToken = (token) => {
-    return jwt.verify(token, config.jwtSecret);
+exports.generateRefreshToken = (user) => {
+    return jwt.sign({ userId: user._id, nickname: user.nickname, email: user.email }, config.jwtRefreshSecret, {
+        expiresIn: '24h',
+    });
 };
 
 // JWT 인증 함수
@@ -54,7 +48,6 @@ exports.isLoggedIn = async (req, res, next) => {
     } catch (error) {
         res.status(error.status).json({
             message: error.message,
-            ...(error.expiredAt && { expiredAt: error.expiredAt }),
         });
     }
 };
@@ -65,6 +58,7 @@ exports.isNotLoggedIn = async (req, res, next) => {
         await authenticateJWT(req, res);
         res.status(403).json({ message: '이미 로그인된 상태입니다.' });
     } catch (error) {
+        // NOTE : 인증되지 않은 사용자인 경우 통과
         if (error.status === 401) {
             next();
         } else {
