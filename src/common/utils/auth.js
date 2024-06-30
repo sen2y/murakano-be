@@ -10,7 +10,7 @@ exports.generateAccessToken = (user) => {
 
 exports.generateRefreshToken = (user) => {
     return jwt.sign({ userId: user._id, nickname: user.nickname, email: user.email }, config.jwtRefreshSecret, {
-        expiresIn: '24h',
+        expiresIn: '12h',
     });
 };
 
