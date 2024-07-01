@@ -66,3 +66,13 @@ exports.isNotLoggedIn = async (req, res, next) => {
         }
     }
 };
+
+exports.isUser = async (req, res, next) => {
+    try {
+        const user = await authenticateJWT(req, res);
+        req.user = user;
+        next();
+    } catch (err) {
+        next();
+    }
+};
