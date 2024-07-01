@@ -43,7 +43,7 @@ exports.isNicknameExist = async (req, res) => {
         data = { isUserExist };
 
         if (isUserExist) {
-            return sendResponse.badRequest(res, {
+            return sendResponse.ok(res, {
                 message: ErrorMessage.EXIST_NICKNAME,
                 data,
             });
@@ -69,7 +69,7 @@ exports.isEmailExist = async (req, res) => {
         const data = { isUserExist };
 
         if (isUserExist) {
-            return sendResponse.badRequest(res, {
+            return sendResponse.ok(res, {
                 message: ErrorMessage.EXIST_EMAIL,
                 data,
             });
