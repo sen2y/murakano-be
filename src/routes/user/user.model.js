@@ -1,6 +1,26 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+const requestSchema = new mongoose.Schema(
+    {
+        word: { type: String, required: true },
+        awkPron: [{ type: String }],
+        comPron: [
+            {
+                type: String,
+                required: function () {
+                    return this.type === 'MOD';
+                },
+            },
+        ],
+        info: { type: String },
+        type: { type: String, enum: ['ADD', 'MOD'], required: true },
+        status: { type: String, enum: ['PEND', 'REJ', 'APP'], default: 'PEND' },
+        deletedAt: { type: Date, default: null },
+    },
+    { timestamps: true }
+);
+
 const userSchema = new mongoose.Schema(
     {
         deletedAt: { type: Date, default: null },
@@ -13,13 +33,19 @@ const userSchema = new mongoose.Schema(
             match: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
         },
         password: { type: String, minLength: 8, maxLength: 20 },
-        role: { type: String, default: 'user' },
+        role: { type: String, enum: ['user', 'ADMIN'], default: 'user' },
         snsId: { type: String, default: null },
-        provider: { type: String, default: null },
+        provider: { type: String, enum: ['kakao'], default: null },
+        recentSearches: [
+            {
+                searchTerm: { type: String, required: true },
+                updatedAt: { type: Date, default: Date.now },
+                deletedAt: { type: Date, default: null },
+            },
+        ],
+        requests: [requestSchema],
     },
-    {
-        timestamps: { currentTime: () => Date.now() },
-    }
+    { timestamps: true }
 );
 
 userSchema.pre('save', async function (next) {
