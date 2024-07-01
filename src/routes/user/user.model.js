@@ -9,13 +9,13 @@ const requestSchema = new mongoose.Schema(
             {
                 type: String,
                 required: function () {
-                    return this.type === 'MOD';
+                    return this.type === 'mod';
                 },
             },
         ],
         info: { type: String },
-        type: { type: String, enum: ['ADD', 'MOD'], required: true },
-        status: { type: String, enum: ['PEND', 'REJ', 'APP'], default: 'PEND' },
+        type: { type: String, enum: ['add', 'mod'], required: true },
+        status: { type: String, enum: ['ped', 'rej', 'app'], default: 'pend' },
         deletedAt: { type: Date, default: null },
     },
     { timestamps: true }
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
             match: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
         },
         password: { type: String, minLength: 8, maxLength: 20 },
-        role: { type: String, enum: ['user', 'ADMIN'], default: 'user' },
+        role: { type: String, enum: ['user', 'admin'], default: 'user' },
         snsId: { type: String, default: null },
         provider: { type: String, enum: ['kakao'], default: null },
         recentSearches: [
