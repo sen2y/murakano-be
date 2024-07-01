@@ -22,9 +22,9 @@ exports.getSearchWords = async (req, res) => {
         if (_id) {
             await userService.updateRecentSearch(_id, searchTerm);
         }
-
+        const message = data ? SucesssMessage.SEARCH_WORDS_SUCCESS : SucesssMessage.SEARCH_WORDS_NONE;
         sendResponse.ok(res, {
-            message: SucesssMessage.SEARCH_WORDS_SUCCESS,
+            message,
             data,
         });
     } catch (error) {
