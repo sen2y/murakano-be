@@ -15,3 +15,13 @@ exports.getSearchWords = async (searchTerm) => {
         return null;
     }
 };
+
+exports.getRankWords = async () => {
+    try {
+        const words = await Word.find().sort({ freq: -1 }).limit(10);
+        return words;
+    } catch (error) {
+        console.log('Error while getting rank words:', error);
+        return null;
+    }
+};
