@@ -188,3 +188,31 @@ exports.logout = (_, res) => {
         message: SucesssMessage.LOGOUT_SUCCESS,
     });
 };
+
+exports.recentSearches = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const recentSearches = await userService.getRecentSearches(_id);
+        sendResponse.ok(res, {
+            message: SucesssMessage.RECENT_WORDS_SUCCESS,
+            data: { recentSearches },
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.RECENT_WORDS_ERROR);
+    }
+};
+
+exports.delRecentSearch = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const { searchTerm } = req.params;
+        await userService.delRecentSearch(_id, searchTerm);
+        sendResponse.ok(res, {
+            message: SucesssMessage.DELETE_RECENT_WORD_SUCCESS,
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.DELETE_RECENT_WORD_ERROR);
+    }
+};

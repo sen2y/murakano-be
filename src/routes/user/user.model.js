@@ -33,9 +33,9 @@ const userSchema = new mongoose.Schema(
             match: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
         },
         password: { type: String, minLength: 8, maxLength: 20 },
-        role: { type: String, enum: ['USER', 'ADMIN'], default: 'USER' },
+        role: { type: String, enum: ['user', 'ADMIN'], default: 'user' },
         snsId: { type: String, default: null },
-        provider: { type: String, enum: ['GOOGLE', 'KAKAO', 'NAVER'], default: null },
+        provider: { type: String, enum: ['kakao'], default: null },
         recentSearches: [
             {
                 searchTerm: { type: String, required: true },
