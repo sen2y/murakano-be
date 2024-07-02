@@ -6,7 +6,17 @@ const SucesssMessage = require('../../common/constants/success-message');
 const { validateRequest } = require('../../common/utils/request.validator');
 const { rankWordsSchema, searchTermSchema } = require('./word.schema');
 
-exports.getRankWords = async (req, res) => {};
+exports.getRankWords = async (req, res) => {
+    try {
+        const data = await wordService.getRankWords();
+        sendResponse.ok(res, {
+            message: SucesssMessage.RANK_WORDS_SUCCESS,
+            data,
+        });
+    } catch (error) {
+        sendResponse.fail(req, res, ErrorMessage.RANK_WORDS_ERROR);
+    }
+};
 
 exports.getSearchWords = async (req, res) => {
     try {

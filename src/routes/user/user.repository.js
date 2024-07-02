@@ -62,7 +62,6 @@ exports.updateRecentSearch = async (_id, searchTerm) => {
             console.log('User not found');
         }
         const recentSearch = user.recentSearches.find((search) => search.searchTerm === searchTerm);
-
         if (recentSearch) {
             // 검색어가 이미 존재하는 경우
             if (recentSearch.deletedAt) {
