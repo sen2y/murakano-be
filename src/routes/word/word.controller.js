@@ -48,16 +48,14 @@ exports.getSearchWords = async (req, res) => {
 
 exports.getWords = async (req, res) => {
     try {
-        const { sort = 'asc', page = 1, limit = 10 } = req.query;
-        const sortOrder = sort === 'desc' ? -1 : 1;
+        // 최초 페이지 로딩시, 최신 순으로 노출
+        const { sort = 'recent', page = 1, limit = 10 } = req.query;
+        const data = await wordService.getWords(sort, page, limit);
 
-        const words = await word
-            .find()
-            .sort({ name: sortOrder })
-            .skip((page - 1) * limit)
-            .limit(parseInt(limit, 10));
-
-        res.status(200).json(words);
+        sendResponse.ok(res, {
+            message: SucesssMessage.GET_WORDS_SUCCESS,
+            data,
+        });
     } catch (error) {
         console.log(error);
         if (error?.type) {
