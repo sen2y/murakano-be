@@ -30,6 +30,7 @@ const ErrorMessage = Object.freeze({
     RECENT_WORDS_ERROR: '최근 검색어 조회중 오류가 발생하였습니다.',
     DELETE_RECENT_WORD_ERROR: '최근 검색어 삭제중 오류가 발생하였습니다.',
     SEARCH_WORDS_ERROR: '검색 결과 조회 중 오류가 발생하였습니다.',
+    GET_WORDS_ERROR: '단어 목록 조회중 오류가 발생하였습니다.',
 });
 
 module.exports = ErrorMessage;
