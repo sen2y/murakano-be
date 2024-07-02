@@ -20,6 +20,9 @@ const SucesssMessage = Object.freeze({
     SEARCH_WORDS_SUCCESS: '검색어 조회 성공',
     SEARCH_WORDS_NONE: '검색 결과가 없습니다.',
     RANK_WORDS_SUCCESS: '인기 검색어 조회 성공',
+
+    // WORD - 조회
+    GET_WORDS_SUCCESS: '단어 조회 성공',
 });
 
 module.exports = SucesssMessage;
