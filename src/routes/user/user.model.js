@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
             maxlength: 50,
             match: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
         },
-        password: { type: String, minLength: 8, maxLength: 20 },
+        password: { type: String },
         role: { type: String, enum: ['user', 'admin'], default: 'user' },
         snsId: { type: String, default: null },
         provider: { type: String, enum: ['kakao'], default: null },
