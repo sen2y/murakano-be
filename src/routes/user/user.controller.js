@@ -215,3 +215,18 @@ exports.delRecentSearch = async (req, res) => {
         sendResponse.fail(req, res, ErrorMessage.DELETE_RECENT_WORD_ERROR);
     }
 };
+
+exports.UserRequests = async (req, res) => {
+    console.log("UserConroller 진입")
+    try{
+        const { _id } = req.user;
+        const requests = await userService.getUserRequests(_id);
+        sendResponse.ok(res, {
+            message: SucesssMessage.GET_REQUESTS_SUCCESS,
+            data: { requests },
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.GET_REQUESTS_ERROR);
+    }
+};

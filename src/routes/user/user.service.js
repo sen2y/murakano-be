@@ -43,3 +43,8 @@ exports.updateRecentSearch = async (userID, searchTerm) => {
         await userRepository.updateRecentSearch(userID, searchTerm);
     }
 };
+
+exports.getUserRequests = async (userId) => {
+    const requests = await userRepository.getUserRequests(userId);
+    return requests;
+};

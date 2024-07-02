@@ -80,3 +80,16 @@ exports.updateRecentSearch = async (_id, searchTerm) => {
         console.error(err);
     }
 };
+
+exports.getUserRequests = async (userId) => {
+    try {
+        const user = await User.findById(userId).select('requests').exec();
+        if (!user) {
+            throw new Error('User not found');
+        }
+        return user.requests;
+    } catch (err) {
+        console.error(err);
+        throw new Error('Error fetching user requests');
+    }
+};

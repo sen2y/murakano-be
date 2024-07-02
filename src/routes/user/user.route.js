@@ -10,6 +10,7 @@ const {
     logout,
     recentSearches,
     delRecentSearch,
+    UserRequests,
 } = require('./user.controller');
 const { isLoggedIn, isNotLoggedIn } = require('../../common/utils/auth');
 const userRouter = express.Router();
@@ -30,5 +31,9 @@ userRouter.get('/profile', isLoggedIn, getProfile);
 // 최근 검색어
 userRouter.get('/recent', isLoggedIn, recentSearches); // 최근 검색어 조회
 userRouter.delete('/:searchTerm', isLoggedIn, delRecentSearch); // 최근 검색어 삭제
+
+// 요청 조회
+userRouter.get('/requests', isLoggedIn, UserRequests); // 요청 목록 조회
+
 
 module.exports = userRouter;
