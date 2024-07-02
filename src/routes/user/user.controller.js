@@ -105,6 +105,9 @@ exports.localLogin = async (req, res, next) => {
 
             return sendResponse.ok(res, {
                 message: SucesssMessage.LOGIN_SUCCESSS,
+                data: {
+                    accessToken: accessToken,
+                },
             });
         })(req, res, next);
     } catch (err) {
@@ -135,6 +138,9 @@ exports.kakaoLogin = async (req, res) => {
 
         sendResponse.ok(res, {
             message: SucesssMessage.LOGIN_SUCCESSS,
+            data: {
+                accessToken: accessToken,
+            },
         });
     } catch (err) {
         sendResponse.fail(req, res, ErrorMessage.KAKAO_LOGIN_ERROR);
@@ -166,7 +172,6 @@ exports.refreshToken = async (req, res) => {
         sendResponse.ok(res, {
             message: SucesssMessage.REFRESH_TOKEN,
             newAccessToken: newAccessToken,
-            newRefreshToken: newRefreshToken,
         });
     });
 };
