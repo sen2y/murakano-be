@@ -11,6 +11,15 @@ const SucesssMessage = Object.freeze({
     REFRESH_TOKEN: 'access token 발급 성공',
 
     GET_PROFILE_SUCCESS: '유저 정보 조회 성공',
+
+    // WORD - 최근검색어
+    RECENT_WORDS_SUCCESS: '최근 검색어 조회 성공',
+    DELETE_RECENT_WORD_SUCCESS: '최근 검색어 삭제 성공',
+
+    // WORD - 검색어
+    SEARCH_WORDS_SUCCESS: '검색어 조회 성공',
+    SEARCH_WORDS_NONE: '검색 결과가 없습니다.',
+    RANK_WORDS_SUCCESS: '인기 검색어 조회 성공',
 });
 
 module.exports = SucesssMessage;

@@ -10,7 +10,7 @@ exports.generateAccessToken = (user) => {
 
 exports.generateRefreshToken = (user) => {
     return jwt.sign({ userId: user._id, nickname: user.nickname, email: user.email }, config.jwtRefreshSecret, {
-        expiresIn: '24h',
+        expiresIn: '12h',
     });
 };
 
@@ -64,5 +64,15 @@ exports.isNotLoggedIn = async (req, res, next) => {
         } else {
             res.status(error.status).json({ message: error.message });
         }
+    }
+};
+
+exports.isUser = async (req, res, next) => {
+    try {
+        const user = await authenticateJWT(req, res);
+        req.user = user;
+        next();
+    } catch (err) {
+        next();
     }
 };

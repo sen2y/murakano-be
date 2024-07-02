@@ -38,12 +38,11 @@ exports.register = async (req, res) => {
 exports.isNicknameExist = async (req, res) => {
     try {
         const { nickname } = validateRequest(nicknameCheckReqQuerySchema, req.query);
-
         const isUserExist = await userService.isNicknameExist(nickname);
         data = { isUserExist };
 
         if (isUserExist) {
-            return sendResponse.badRequest(res, {
+            return sendResponse.ok(res, {
                 message: ErrorMessage.EXIST_NICKNAME,
                 data,
             });
@@ -55,7 +54,7 @@ exports.isNicknameExist = async (req, res) => {
         });
     } catch (err) {
         if (err?.type) {
-            return sendResponse.badRequest(res, err.message);
+            return sendResponse.badRequest(res, err);
         }
         sendResponse.fail(req, res, ErrorMessage.NICKNAME_CHECK_ERROR);
     }
@@ -69,7 +68,7 @@ exports.isEmailExist = async (req, res) => {
         const data = { isUserExist };
 
         if (isUserExist) {
-            return sendResponse.badRequest(res, {
+            return sendResponse.ok(res, {
                 message: ErrorMessage.EXIST_EMAIL,
                 data,
             });
@@ -187,4 +186,32 @@ exports.logout = (_, res) => {
     return sendResponse.ok(res, {
         message: SucesssMessage.LOGOUT_SUCCESS,
     });
+};
+
+exports.recentSearches = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const recentSearches = await userService.getRecentSearches(_id);
+        sendResponse.ok(res, {
+            message: SucesssMessage.RECENT_WORDS_SUCCESS,
+            data: { recentSearches },
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.RECENT_WORDS_ERROR);
+    }
+};
+
+exports.delRecentSearch = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const { searchTerm } = req.params;
+        await userService.delRecentSearch(_id, searchTerm);
+        sendResponse.ok(res, {
+            message: SucesssMessage.DELETE_RECENT_WORD_SUCCESS,
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.DELETE_RECENT_WORD_ERROR);
+    }
 };
