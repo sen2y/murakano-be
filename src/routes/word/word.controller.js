@@ -35,3 +35,24 @@ exports.getSearchWords = async (req, res) => {
         sendResponse.fail(req, res, ErrorMessage.SEARCH_WORDS_ERROR);
     }
 };
+
+exports.getWords = async (req, res) => {
+    try {
+        const { sort = 'asc', page = 1, limit = 10 } = req.query;
+        const sortOrder = sort === 'desc' ? -1 : 1;
+
+        const words = await word
+            .find()
+            .sort({ name: sortOrder })
+            .skip((page - 1) * limit)
+            .limit(parseInt(limit, 10));
+
+        res.status(200).json(words);
+    } catch (error) {
+        console.log(error);
+        if (error?.type) {
+            return sendResponse.badRequest(res, error.message);
+        }
+        sendResponse.fail(req, res, ErrorMessage.GET_WORDS_ERROR);
+    }
+};
