@@ -100,11 +100,13 @@ exports.localLogin = async (req, res, next) => {
             const accessToken = generateAccessToken(user);
             const refreshToken = generateRefreshToken(user);
 
-            res.cookie('accessToken', accessToken, config.cookieInAccessTokenOptions);
             res.cookie('refreshToken', refreshToken, config.cookieInRefreshTokenOptions);
 
             return sendResponse.ok(res, {
                 message: SucesssMessage.LOGIN_SUCCESSS,
+                data: {
+                    accessToken: accessToken,
+                },
             });
         })(req, res, next);
     } catch (err) {
@@ -130,11 +132,13 @@ exports.kakaoLogin = async (req, res) => {
 
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
-        res.cookie('accessToken', accessToken, config.cookieInAccessTokenOptions);
         res.cookie('refreshToken', refreshToken, config.cookieInRefreshTokenOptions);
 
         sendResponse.ok(res, {
             message: SucesssMessage.LOGIN_SUCCESSS,
+            data: {
+                accessToken: accessToken,
+            },
         });
     } catch (err) {
         sendResponse.fail(req, res, ErrorMessage.KAKAO_LOGIN_ERROR);
@@ -160,13 +164,13 @@ exports.refreshToken = async (req, res) => {
         const newAccessToken = generateAccessToken({ _id: user.userId, nickname: user.nickname, email: user.email });
         const newRefreshToken = generateRefreshToken({ _id: user.userId, nickname: user.nickname, email: user.email });
 
-        res.cookie('accessToken', newAccessToken, config.cookieInAccessTokenOptions);
         res.cookie('refreshToken', newRefreshToken, config.cookieInRefreshTokenOptions);
 
         sendResponse.ok(res, {
             message: SucesssMessage.REFRESH_TOKEN,
-            newAccessToken: newAccessToken,
-            newRefreshToken: newRefreshToken,
+            data: {
+                accessToken: newAccessToken,
+            },
         });
     });
 };
@@ -181,7 +185,6 @@ exports.getProfile = (req, res) => {
 };
 
 exports.logout = (_, res) => {
-    res.clearCookie('accessToken');
     res.clearCookie('refreshToken');
     return sendResponse.ok(res, {
         message: SucesssMessage.LOGOUT_SUCCESS,
