@@ -45,6 +45,8 @@ exports.updateRecentSearch = async (userID, searchTerm) => {
 };
 
 exports.getUserRequests = async (userId) => {
+    console.log("userId", userId)
+    console.log("user service 진입!")
     const requests = await userRepository.getUserRequests(userId);
     return requests;
 };

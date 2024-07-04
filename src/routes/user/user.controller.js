@@ -228,6 +228,7 @@ exports.UserRequests = async (req, res) => {
             message: SucesssMessage.GET_REQUESTS_SUCCESS,
             data: { requests },
         });
+        console.log("사용자 정보 가져오기 성공!")
     } catch (err) {
         console.log(err);
         sendResponse.fail(req, res, ErrorMessage.GET_REQUESTS_ERROR);

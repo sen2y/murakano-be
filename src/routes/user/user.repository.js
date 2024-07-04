@@ -57,11 +57,14 @@ exports.delRecentSearch = async (_id, searchTerm) => {
 
 exports.updateRecentSearch = async (_id, searchTerm) => {
     try {
+        console.log("id", _id)
+        console.log("searchTerm", searchTerm)
         const user = await User.findById(_id).exec();
         if (!user) {
             console.log('User not found');
         }
-        const recentSearch = user.recentSearches.find((search) => search.searchTerm === searchTerm);
+        const recentSearch = user.recentSearches.find((search) => search.searchTerm === searchTerm);f
+        console.log("recentSearch", recentSearch)
         if (recentSearch) {
             // 검색어가 이미 존재하는 경우
             if (recentSearch.deletedAt) {
@@ -87,7 +90,10 @@ exports.getUserRequests = async (userId) => {
         if (!user) {
             throw new Error('User not found');
         }
-        return user.requests;
+        // requests 배열에서 deletedAt이 null인 항목만 필터링
+        const activeRequests = user.requests.filter(request => request.deletedAt === null);
+        return activeRequests;
+        
     } catch (err) {
         console.error(err);
         throw new Error('Error fetching user requests');
