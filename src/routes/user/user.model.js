@@ -15,7 +15,7 @@ const requestSchema = new mongoose.Schema(
         ],
         info: { type: String },
         type: { type: String, enum: ['add', 'mod'], required: true },
-ㅇ        status: { type: String, enum: ['pend', 'rej', 'app'], default: 'pend' },
+        status: { type: String, enum: ['pend', 'rej', 'app'], default: 'pend' },
         deletedAt: { type: Date, default: null },
     },
     { timestamps: true }
