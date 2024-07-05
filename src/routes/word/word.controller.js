@@ -21,11 +21,8 @@ exports.getRankWords = async (req, res) => {
 // 연관검색어 : 쿼리스트링으로 전달받은 검색어 searchTerm을 포함하는 단어 조회
 exports.getRelatedWords = async (req, res) => {
     try {
-        const keyword = validateRequest(searchTermSchema, req.query.keyword);
-        // const keyword = req.query.keyword;
-        const limit = req.query.limit;
-        console.log(keyword, limit);
-        // 연관 검색어 필터링
+        const { keyword, limit } = req.query;
+        keyword = validateRequest(searchTermSchema, keyword);
         const data = await wordService.getRelatedWords(keyword, limit);
         sendResponse.ok(res, {
             message: SucesssMessage.RELATED_WORDS_SUCCESS,
