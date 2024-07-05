@@ -220,7 +220,6 @@ exports.delRecentSearch = async (req, res) => {
 };
 
 exports.UserRequests = async (req, res) => {
-    console.log("UserConroller 진입")
     try{
         const { _id } = req.user;
         const requests = await userService.getUserRequests(_id);
@@ -228,9 +227,47 @@ exports.UserRequests = async (req, res) => {
             message: SucesssMessage.GET_REQUESTS_SUCCESS,
             data: { requests },
         });
-        console.log("사용자 정보 가져오기 성공!")
     } catch (err) {
         console.log(err);
         sendResponse.fail(req, res, ErrorMessage.GET_REQUESTS_ERROR);
     }
 };
+
+exports.UserRequestsAll = async (req, res) => {
+    try{
+        const requests = await userService.getUserRequestsAll();
+        sendResponse.ok(res, {
+            message: SucesssMessage.GET_REQUESTS_SUCCESS,
+            data: { requests },
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.GET_REQUESTS_ERROR);
+    }
+}
+
+exports.deleteRequest = async (req, res) => {
+    try{
+        const { _id } = req.user; // 현재 로그인한 사용자의 고유 식별자
+        const { word } = req.params;
+        console.log("컨트롤러 _id:", _id);
+        console.log("컨트롤러 word:", word);
+        await userService.deleteRequest(_id, word);
+        sendResponse.ok(res, {
+            message: SucesssMessage.DELETE_REQUEST_SUCCESS,
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.DELETE_REQUEST_ERROR);
+    }
+}
+
+exports.getRole = async (req, res) => {
+    console.log("사용자 역할 user controller")
+    const { _id } = req.user;
+    const role = await userService.getRole(_id);
+    sendResponse.ok(res, {
+        message: SucesssMessage.GET_ROLE_SUCCESS,
+        data: { role },
+    });
+}

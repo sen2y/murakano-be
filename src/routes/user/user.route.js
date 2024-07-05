@@ -11,6 +11,9 @@ const {
     recentSearches,
     delRecentSearch,
     UserRequests,
+    UserRequestsAll,
+    deleteRequest,
+    getRole,
 } = require('./user.controller');
 const { isLoggedIn, isNotLoggedIn } = require('../../common/utils/auth');
 const userRouter = express.Router();
@@ -34,6 +37,8 @@ userRouter.delete('/:searchTerm', isLoggedIn, delRecentSearch); // 최근 검색
 
 // 요청 조회
 userRouter.get('/requests', isLoggedIn, UserRequests); // 요청 목록 조회
-
+userRouter.get('/requests/all', isLoggedIn, UserRequestsAll); // 모든 요청 목록 조회
+userRouter.delete('/requests/:word', isLoggedIn, deleteRequest);
+userRouter.get('/role', isLoggedIn, getRole);
 
 module.exports = userRouter;

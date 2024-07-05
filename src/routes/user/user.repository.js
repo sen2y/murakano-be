@@ -1,4 +1,5 @@
 const User = require('./user.model');
+const mongoose = require('mongoose');
 
 exports.createUser = async (userData) => {
     try {
@@ -96,6 +97,61 @@ exports.getUserRequests = async (userId) => {
         
     } catch (err) {
         console.error(err);
-        throw new Error('Error fetching user requests');
     }
 };
+
+exports.getUserRequestsAll = async () => {
+    try {
+        const users = await User.find({}, { requests: 1, _id: 0 }); // 모든 유저의 requests 필드만 가져옴
+        console.log("users", users)
+        const allRequests = [];
+
+        users.forEach(user => {
+            user.requests.forEach(request => {
+                if (request.deletedAt === null) {
+                    allRequests.push(request);
+                }
+            });
+        });
+
+        return allRequests;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+exports.deleteRequest = async (userId, requestWord) => {
+    try {
+        const user = await User.findById(userId).select('requests').exec();
+        if (!user) {
+            console.log("사용자를 찾을 수 없음");
+            throw new Error('User not found');
+        }
+
+        console.log("사용자 요청 목록:", user.requests);
+
+        const request = user.requests.find(req => req.word === requestWord && req.deletedAt === null);
+        if (request) {
+            console.log("삭제할 요청 찾음:", request);
+            request.deletedAt = Date.now(); // 요청을 삭제로 표시
+            await user.save();
+
+            console.log("요청 삭제 성공");
+            return res.status(200).json({ success: true, message: 'deleted successfully' });
+        } else {
+            return res.status(404).json({ success: false, message: 'not found' }); // 수정된 부분
+        }
+    } catch (err) {
+        console.error(err);
+        return { success: false, message: 'Error deleting request' };
+    }
+}
+
+exports.getRole = async (userId) => {
+    try {
+        const user = await User.findById(userId).select('role').exec();
+        return user.role;
+    } catch (err) {
+        console.error(err);
+    }
+}

@@ -45,8 +45,23 @@ exports.updateRecentSearch = async (userID, searchTerm) => {
 };
 
 exports.getUserRequests = async (userId) => {
-    console.log("userId", userId)
-    console.log("user service 진입!")
     const requests = await userRepository.getUserRequests(userId);
     return requests;
+};
+
+exports.getUserRequestsAll = async () => {
+    const requests = await userRepository.getUserRequestsAll();
+    return requests;
+};
+
+exports.deleteRequest = async (userId, requestWord) => {
+    console.log("서비스 userid", userId)
+    console.log("서비스 requestword", requestWord)
+    const result = await userRepository.deleteRequest(userId, requestWord);
+    return result;
+};
+
+exports.getRole = async (userId) => {
+    const role = await userRepository.getRole(userId);
+    return role;
 };
