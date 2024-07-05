@@ -1,5 +1,5 @@
 const searchTermSchema = {
-    type: 'object',
+    type: 'string',
     properties: {
         searchTerm: {
             type: 'string',

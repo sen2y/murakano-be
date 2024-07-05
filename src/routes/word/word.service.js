@@ -11,3 +11,9 @@ exports.getRankWords = async () => {
     const rankWords = await wordRepository.getRankWords();
     return rankWords;
 };
+
+// 연관검색어 조회
+exports.getRelatedWords = async (keyword, limit) => {
+    const relatedWords = await wordRepository.getRelatedWords(keyword, limit);
+    return relatedWords;
+};
