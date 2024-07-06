@@ -1,7 +1,7 @@
 const wordService = require('./word.service');
 const sendResponse = require('../../common/utils/response-handler');
 const ErrorMessage = require('../../common/constants/error-message');
-const SucesssMessage = require('../../common/constants/success-message');
+const SuccessMessage = require('../../common/constants/success-message');
 const { validateRequest } = require('../../common/utils/request.validator');
 const { searchTermSchema } = require('./word.schema');
 const Word = require('./word.model');
@@ -11,7 +11,7 @@ exports.getRankWords = async (req, res) => {
     try {
         const data = await wordService.getRankWords();
         sendResponse.ok(res, {
-            message: SucesssMessage.RANK_WORDS_SUCCESS,
+            message: SuccessMessage.RANK_WORDS_SUCCESS,
             data,
         });
     } catch (error) {
@@ -26,7 +26,7 @@ exports.getRelatedWords = async (req, res) => {
         keyword = validateRequest(searchTermSchema, keyword);
         const data = await wordService.getRelatedWords(keyword, limit);
         sendResponse.ok(res, {
-            message: SucesssMessage.RELATED_WORDS_SUCCESS,
+            message: SuccessMessage.RELATED_WORDS_SUCCESS,
             data,
         });
     } catch (error) {
@@ -38,6 +38,7 @@ exports.getRelatedWords = async (req, res) => {
 exports.postWords = async (req, res) => {
     try {
         const { word, awkPron, comPron, info } = req.body;
+        console.log(word);
         // 새로운 단어 생성
         const newWord = new Word({
             word,
@@ -50,7 +51,7 @@ exports.postWords = async (req, res) => {
         await newWord.save();
 
         sendResponse.ok(res, {
-            message: SucesssMessage.REGISTER_WORDS_SUCCESS,
+            message: SuccessMessage.REGISTER_WORDS_SUCCESS,
             data,
         })
     } catch (error) {
