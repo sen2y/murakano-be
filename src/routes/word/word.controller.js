@@ -51,7 +51,6 @@ exports.getRelatedWords = async (req, res) => {
     try {
         let { searchTerm, limit } = req.query;
         searchTerm = validateRequest(relatedTermSchema, searchTerm);
-        console.log(searchTerm, limit);
         const data = await wordService.getRelatedWords(searchTerm, limit);
         sendResponse.ok(res, {
             message: SucesssMessage.RELATED_WORDS_SUCCESS,
