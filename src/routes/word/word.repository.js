@@ -27,9 +27,9 @@ exports.getRankWords = async () => {
     }
 };
 
-exports.getRelatedWords = async (keyword, limit) => {
+exports.getRelatedWords = async (searchTerm, limit) => {
     try {
-        const relatedWords = await Word.find({ word: new RegExp(keyword, 'i') })
+        const relatedWords = await Word.find({ word: new RegExp(searchTerm, 'i') })
             .sort({ freq: -1 })
             .limit(parseInt(limit));
         const wordNames = relatedWords.map((word) => word.word);
