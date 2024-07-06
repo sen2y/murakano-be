@@ -27,6 +27,19 @@ exports.getRankWords = async () => {
     }
 };
 
+exports.getRelatedWords = async (searchTerm, limit) => {
+    try {
+        const relatedWords = await Word.find({ word: new RegExp(searchTerm, 'i') })
+            .sort({ freq: -1 })
+            .limit(parseInt(limit));
+        const wordNames = relatedWords.map((word) => word.word);
+        return wordNames;
+    } catch (error) {
+        console.log('Error while getting related words:', error);
+        return null;
+    }
+};
+
 // 전체 단어목록 조회
 exports.getAllWords = async (isSorted, page = 1, limit = 10) => {
     try {
