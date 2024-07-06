@@ -46,11 +46,13 @@ exports.getSearchWords = async (req, res) => {
     }
 };
 
-exports.getWords = async (req, res) => {
+exports.getAllWords = async (req, res) => {
     try {
         // 최초 페이지 로딩시, 최신 순으로 노출
         const { sort = 'recent', page = 1, limit = 10 } = req.query;
-        const data = await wordService.getWords(sort, page, limit);
+        console.log(`Sort: ${sort}, Page: ${page}, Limit: ${limit}`);
+
+        const data = await wordService.getAllWords(sort, parseInt(page, 10), parseInt(limit, 10));
 
         sendResponse.ok(res, {
             message: SucesssMessage.GET_WORDS_SUCCESS,

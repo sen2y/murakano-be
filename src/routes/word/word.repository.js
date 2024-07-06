@@ -28,7 +28,7 @@ exports.getRankWords = async () => {
 };
 
 // 전체 단어목록 조회
-exports.findAllWords = async (isSorted, page = 1, limit = 10) => {
+exports.getAllWords = async (isSorted, page = 1, limit = 10) => {
     try {
         const skip = (page - 1) * limit;
         const sortOrder = {};
@@ -40,8 +40,7 @@ exports.findAllWords = async (isSorted, page = 1, limit = 10) => {
             sortOrder.createdAt = -1;
             sortOrder.word = 1; // createdAt이 동일한 경우 단어 오름차순으로 정렬
         }
-
-        const words = await Word.find().sort({ word: sortOrder }).skip(skip).limit(parseInt(limit, 10));
+        const words = await Word.find().sort(sortOrder).skip(skip).limit(parseInt(limit, 10));
         return words;
     } catch (error) {
         console.log('Error while getting all words:', error);
