@@ -278,6 +278,6 @@ exports.updateRequest = async (req, res) => {
     const { formData } = req.body;
     await userService.updateRequest(_id, word, formData);
     sendResponse.ok(res, {
-        message: SuccessMessage.UPDATE_REQUEST_SUCCESS,
+        message: SuccessMessage.UPDATE_REQUEST_SUCCESS
     });
 }

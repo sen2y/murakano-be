@@ -25,6 +25,7 @@ const SucesssMessage = Object.freeze({
     DELETE_REQUEST_SUCCESS: '요청 삭제 성공',
     GET_REQUESTS_SUCCESS: '요청 조회 성공',
     GET_ROLE_SUCCESS: '사용자 역할 조회 성공',
+    UPDATE_REQUEST_SUCCESS: '요청 수정 성공',
 });
 
 module.exports = SucesssMessage;

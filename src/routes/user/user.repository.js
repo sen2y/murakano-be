@@ -86,7 +86,7 @@ exports.updateRecentSearch = async (_id, searchTerm) => {
 };
 
 exports.getUserRequests = async (userId) => {
-    try {
+    try { 
         const user = await User.findById(userId).select('requests').exec();
         if (!user) {
             throw new Error('User not found');
@@ -137,13 +137,10 @@ exports.deleteRequest = async (userId, requestWord) => {
             await user.save();
 
             console.log("요청 삭제 성공");
-            return res.status(200).json({ success: true, message: 'deleted successfully' });
         } else {
-            return res.status(404).json({ success: false, message: 'not found' }); // 수정된 부분
         }
     } catch (err) {
         console.error(err);
-        return { success: false, message: 'Error deleting request' };
     }
 }
 
@@ -184,12 +181,9 @@ exports.updateRequest = async (userId, requestWord, formData) => {
 
             await user.save();
 
-            return { success: true, message: 'Request updated successfully' };
         } else {
-            return { success: false, message: 'Request not found' };
         }
     } catch (err) {
         console.error(err);
-        return { success: false, message: 'Error updating request' };
     }
 }
