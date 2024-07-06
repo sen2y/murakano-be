@@ -21,6 +21,9 @@ const SucesssMessage = Object.freeze({
     SEARCH_WORDS_NONE: '검색 결과가 없습니다.',
     RANK_WORDS_SUCCESS: '인기 검색어 조회 성공',
     RELATED_WORDS_SUCCESS: '연관 검색어 조회 성공',
+
+    // Word - 등록요청
+    REGISTER_WORDS_SUCCESS: '등록 요청 성공',
 });
 
 module.exports = SucesssMessage;
