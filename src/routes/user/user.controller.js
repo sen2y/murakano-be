@@ -5,7 +5,7 @@ const config = require('../../common/config');
 const userService = require('./user.service');
 const sendResponse = require('../../common/utils/response-handler');
 const ErrorMessage = require('../../common/constants/error-message');
-const SucesssMessage = require('../../common/constants/success-message');
+const SuccessMessage = require('../../common/constants/success-message');
 const { validateRequest } = require('../../common/utils/request.validator');
 const {
     nicknameCheckReqQuerySchema,
@@ -23,7 +23,7 @@ exports.register = async (req, res) => {
 
         const data = { user_id: newUser._id };
         sendResponse.created(res, {
-            message: SucesssMessage.REGISTER_SUCCESSS,
+            message: SuccessMessage.REGISTER_SUCCESSS,
             data,
         });
     } catch (err) {
@@ -49,7 +49,7 @@ exports.isNicknameExist = async (req, res) => {
         }
 
         return sendResponse.ok(res, {
-            message: SucesssMessage.AVAILABLE_NICKNAME,
+            message: SuccessMessage.AVAILABLE_NICKNAME,
             data,
         });
     } catch (err) {
@@ -74,7 +74,7 @@ exports.isEmailExist = async (req, res) => {
             });
         }
         return sendResponse.ok(res, {
-            message: SucesssMessage.AVAILABLE_EMAIL,
+            message: SuccessMessage.AVAILABLE_EMAIL,
             data,
         });
     } catch (err) {
@@ -103,7 +103,7 @@ exports.localLogin = async (req, res, next) => {
             res.cookie('refreshToken', refreshToken, config.cookieInRefreshTokenOptions);
 
             return sendResponse.ok(res, {
-                message: SucesssMessage.LOGIN_SUCCESSS,
+                message: SuccessMessage.LOGIN_SUCCESSS,
                 data: {
                     accessToken: accessToken,
                 },
@@ -135,7 +135,7 @@ exports.kakaoLogin = async (req, res) => {
         res.cookie('refreshToken', refreshToken, config.cookieInRefreshTokenOptions);
 
         sendResponse.ok(res, {
-            message: SucesssMessage.LOGIN_SUCCESSS,
+            message: SuccessMessage.LOGIN_SUCCESSS,
             data: {
                 accessToken: accessToken,
             },
@@ -167,7 +167,7 @@ exports.refreshToken = async (req, res) => {
         res.cookie('refreshToken', newRefreshToken, config.cookieInRefreshTokenOptions);
 
         sendResponse.ok(res, {
-            message: SucesssMessage.REFRESH_TOKEN,
+            message: SuccessMessage.REFRESH_TOKEN,
             data: {
                 accessToken: newAccessToken,
             },
@@ -179,7 +179,7 @@ exports.getProfile = (req, res) => {
     const { _id, nickname, email } = req.user;
     const data = { _id, nickname, email };
     sendResponse.ok(res, {
-        message: SucesssMessage.GET_PROFILE_SUCCESS,
+        message: SuccessMessage.GET_PROFILE_SUCCESS,
         data,
     });
 };
@@ -187,7 +187,7 @@ exports.getProfile = (req, res) => {
 exports.logout = (_, res) => {
     res.clearCookie('refreshToken');
     return sendResponse.ok(res, {
-        message: SucesssMessage.LOGOUT_SUCCESS,
+        message: SuccessMessage.LOGOUT_SUCCESS,
     });
 };
 
@@ -196,7 +196,7 @@ exports.recentSearches = async (req, res) => {
         const { _id } = req.user;
         const recentSearches = await userService.getRecentSearches(_id);
         sendResponse.ok(res, {
-            message: SucesssMessage.RECENT_WORDS_SUCCESS,
+            message: SuccessMessage.RECENT_WORDS_SUCCESS,
             data: { recentSearches },
         });
     } catch (err) {
@@ -211,7 +211,7 @@ exports.delRecentSearch = async (req, res) => {
         const { searchTerm } = req.params;
         await userService.delRecentSearch(_id, searchTerm);
         sendResponse.ok(res, {
-            message: SucesssMessage.DELETE_RECENT_WORD_SUCCESS,
+            message: SuccessMessage.DELETE_RECENT_WORD_SUCCESS,
         });
     } catch (err) {
         console.log(err);

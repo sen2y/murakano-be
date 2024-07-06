@@ -1,3 +1,15 @@
+const relatedTermSchema = {
+    type: 'string',
+    properties: {
+        searchTerm: {
+            type: 'string',
+            maxLength: 50,
+        },
+    },
+    required: ['searchTerm'],
+    additionalProperties: false,
+};
+
 const searchTermSchema = {
     type: 'object',
     properties: {
@@ -10,4 +22,4 @@ const searchTermSchema = {
     additionalProperties: false,
 };
 
-module.exports = { searchTermSchema };
+module.exports = { searchTermSchema, relatedTermSchema };
