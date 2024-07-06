@@ -13,7 +13,7 @@ exports.getRankWords = async () => {
 };
 
 // 연관검색어 조회
-exports.getRelatedWords = async (keyword, limit) => {
-    const relatedWords = await wordRepository.getRelatedWords(keyword, limit);
+exports.getRelatedWords = async (searchTerm, limit) => {
+    const relatedWords = await wordRepository.getRelatedWords(searchTerm, limit);
     return relatedWords;
 };
