@@ -70,8 +70,7 @@ const sendResponse = {
 
         // logging Error
         const errInfo = {
-            uid: req.userInfo ? req.userInfo.userId : undefined,
-            creatorId: req.userInfo ? req.userInfo.creatorId : undefined,
+            user_id: req.user ? req.user._id : undefined,
             where: 'apiServer',
             from: req.baseUrl || 'unknown',
             params: {

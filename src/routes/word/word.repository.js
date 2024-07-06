@@ -26,3 +26,16 @@ exports.getRankWords = async () => {
         return null;
     }
 };
+
+exports.getRelatedWords = async (searchTerm, limit) => {
+    try {
+        const relatedWords = await Word.find({ word: new RegExp(searchTerm, 'i') })
+            .sort({ freq: -1 })
+            .limit(parseInt(limit));
+        const wordNames = relatedWords.map((word) => word.word);
+        return wordNames;
+    } catch (error) {
+        console.log('Error while getting related words:', error);
+        return null;
+    }
+};
