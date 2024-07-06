@@ -10,8 +10,9 @@ const {
     logout,
     recentSearches,
     delRecentSearch,
+    postWords,
 } = require('./user.controller');
-const { isLoggedIn, isNotLoggedIn } = require('../../common/utils/auth');
+const { isLoggedIn, isNotLoggedIn, isUser } = require('../../common/utils/auth');
 const userRouter = express.Router();
 
 // 회원가입
@@ -30,5 +31,8 @@ userRouter.get('/profile', isLoggedIn, getProfile);
 // 최근 검색어
 userRouter.get('/recent', isLoggedIn, recentSearches); // 최근 검색어 조회
 userRouter.delete('/:searchTerm', isLoggedIn, delRecentSearch); // 최근 검색어 삭제
+
+//등록 요청
+userRouter.post('/requests/new', isUser, postWords);
 
 module.exports = userRouter;

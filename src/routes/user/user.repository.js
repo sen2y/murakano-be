@@ -80,3 +80,26 @@ exports.updateRecentSearch = async (_id, searchTerm) => {
         console.error(err);
     }
 };
+
+exports.postWords = async (userId, formData) => {
+    try {
+        const user = await User.findById(userId).select('requests').exec();
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        user.requests.push({
+            word: formData.devTerm,
+            info: formData.addInfo,
+            awkPron: formData.awkPron,
+            comPron: formData.commonPron,
+            deletedAt: null,
+            status: 'pend',
+            type: 'add'
+        });
+
+        await user.save();
+    } catch (err) {
+        console.error(err);
+    }
+};

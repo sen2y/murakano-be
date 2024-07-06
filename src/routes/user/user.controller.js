@@ -218,3 +218,17 @@ exports.delRecentSearch = async (req, res) => {
         sendResponse.fail(req, res, ErrorMessage.DELETE_RECENT_WORD_ERROR);
     }
 };
+// 새로운 단어 등록
+exports.postWords = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const { formData } = req.body;
+        await userService.postWords(_id, formData);
+        sendResponse.ok(res, {
+            message: SuccessMessage.REGISTER_WORDS_SUCCESS,
+        });
+    } catch (error) {
+        console.log(error)
+        sendResponse.fail(req, res, ErrorMessage.REGISTER_WORDS_ERROR);
+    }
+}; 

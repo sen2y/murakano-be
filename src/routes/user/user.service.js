@@ -43,3 +43,9 @@ exports.updateRecentSearch = async (userID, searchTerm) => {
         await userRepository.updateRecentSearch(userID, searchTerm);
     }
 };
+
+// 새로운 단어 생성
+exports.postWords = async (word, awkPron, comPron, info) => {
+    const newWord = await userRepository.postWords(word, awkPron, comPron, info);
+    return newWord;
+};
