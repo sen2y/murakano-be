@@ -155,3 +155,41 @@ exports.getRole = async (userId) => {
         console.error(err);
     }
 }
+
+exports.updateRequest = async (userId, requestWord, formData) => {
+    try {
+        const user = await User.findById(userId).select('requests').exec();
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        const request = user.requests.find(req => req.word === requestWord && req.deletedAt === null);
+        if (request) {
+            // formData의 각 속성 값으로 request의 해당 속성 값 업데이트
+            console.log("formData", formData)
+            console.log("request", request.info)
+
+            if (formData.addInfo !== undefined) {
+                request.info = formData.addInfo;
+            }
+            if (formData.awkPron !== undefined) {
+                request.awkPron = formData.awkPron;
+            }
+            if (formData.commonPron !== undefined) {
+                request.comPron = formData.commonPron;
+            }
+            if (formData.devTerm !== undefined) {
+                request.word = formData.devTerm;
+            }
+
+            await user.save();
+
+            return { success: true, message: 'Request updated successfully' };
+        } else {
+            return { success: false, message: 'Request not found' };
+        }
+    } catch (err) {
+        console.error(err);
+        return { success: false, message: 'Error updating request' };
+    }
+}

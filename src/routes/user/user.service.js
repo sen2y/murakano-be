@@ -65,3 +65,9 @@ exports.getRole = async (userId) => {
     const role = await userRepository.getRole(userId);
     return role;
 };
+
+exports.updateRequest = async (userId, requestWord, formData) => {
+    if(userId) {
+        await userRepository.updateRequest(userId, requestWord, formData);
+    }
+};

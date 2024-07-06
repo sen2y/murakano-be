@@ -263,11 +263,21 @@ exports.deleteRequest = async (req, res) => {
 }
 
 exports.getRole = async (req, res) => {
-    console.log("사용자 역할 user controller")
     const { _id } = req.user;
     const role = await userService.getRole(_id);
     sendResponse.ok(res, {
         message: SucesssMessage.GET_ROLE_SUCCESS,
         data: { role },
+    });
+}
+
+exports.updateRequest = async (req, res) => {
+    console.log("사용자 요청 수정 user controller")
+    const { _id } = req.user;
+    const { word } = req.params;
+    const { formData } = req.body;
+    await userService.updateRequest(_id, word, formData);
+    sendResponse.ok(res, {
+        message: SucesssMessage.UPDATE_REQUEST_SUCCESS,
     });
 }

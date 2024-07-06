@@ -13,6 +13,7 @@ const {
     UserRequests,
     UserRequestsAll,
     deleteRequest,
+    updateRequest,
     getRole,
 } = require('./user.controller');
 const { isLoggedIn, isNotLoggedIn } = require('../../common/utils/auth');
@@ -38,7 +39,8 @@ userRouter.delete('/:searchTerm', isLoggedIn, delRecentSearch); // 최근 검색
 // 요청 조회
 userRouter.get('/requests', isLoggedIn, UserRequests); // 요청 목록 조회
 userRouter.get('/requests/all', isLoggedIn, UserRequestsAll); // 모든 요청 목록 조회
-userRouter.delete('/requests/:word', isLoggedIn, deleteRequest);
-userRouter.get('/role', isLoggedIn, getRole);
+userRouter.get('/role', isLoggedIn, getRole); // 사용자 역할 가져오기
+userRouter.delete('/requests/:word', isLoggedIn, deleteRequest); // 사용자 요청 삭제
+userRouter.post('/requests/:word', isLoggedIn, updateRequest); // 사용자 요청 수정
 
 module.exports = userRouter;
