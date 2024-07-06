@@ -20,7 +20,7 @@ exports.getSearchWords = async (req, res) => {
         if (_id) {
             await userService.updateRecentSearch(_id, searchTerm);
         }
-        const message = data ? SucesssMessage.SEARCH_WORDS_SUCCESS : SucesssMessage.SEARCH_WORDS_NONE;
+        const message = data ? SuccessMessage.SEARCH_WORDS_SUCCESS : SuccessMessage.SEARCH_WORDS_NONE;
         sendResponse.ok(res, {
             message,
             data,
