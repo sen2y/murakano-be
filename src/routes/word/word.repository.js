@@ -39,3 +39,4 @@ exports.getRelatedWords = async (searchTerm, limit) => {
         return null;
     }
 };
+

@@ -5,7 +5,6 @@ const ErrorMessage = require('../../common/constants/error-message');
 const SuccessMessage = require('../../common/constants/success-message');
 const { validateRequest } = require('../../common/utils/request.validator');
 const { searchTermSchema, relatedTermSchema } = require('./word.schema');
-const Word = require('./word.model');
 
 // 검색어 조회
 exports.getSearchWords = async (req, res) => {
@@ -62,28 +61,4 @@ exports.getRelatedWords = async (req, res) => {
     }
 };
 
-// 등록요청 모달: 등록을 하면 DB에 upload
-exports.postWords = async (req, res) => {
-    try {
-        const { word, awkPron, comPron, info } = req.body;
-        console.log(word);
-        // 새로운 단어 생성
-        const newWord = new Word({
-            word,
-            awkPron,
-            comPron,
-            info
-        });
 
-        // 데이터베이스에 저장
-        await newWord.save();
-
-        sendResponse.ok(res, {
-            message: SuccessMessage.REGISTER_WORDS_SUCCESS,
-            data,
-        })
-    } catch (error) {
-        sendResponse.fail(req, res, ErrorMessage.REGISTER_WORDS_ERROR)
-
-    }
-};
