@@ -99,7 +99,9 @@ exports.postWords = async (userId, formData) => {
         });
 
         await user.save();
+        return user.requests[user.requests.length - 1]; // 새로 추가된 요청 반환
     } catch (err) {
         console.error(err);
+        throw err;
     }
 };

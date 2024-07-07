@@ -45,7 +45,11 @@ exports.updateRecentSearch = async (userID, searchTerm) => {
 };
 
 // 새로운 단어 생성
-exports.postWords = async (word, awkPron, comPron, info) => {
-    const newWord = await userRepository.postWords(word, awkPron, comPron, info);
-    return newWord;
+exports.postWords = async (userId, formData) => {
+    try {
+        const newWord = await userRepository.postWords(userId, formData);
+        return newWord;
+    } catch (error) {
+        throw new Error('Error creating new word');
+    }
 };

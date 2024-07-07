@@ -222,13 +222,17 @@ exports.delRecentSearch = async (req, res) => {
 exports.postWords = async (req, res) => {
     try {
         const { _id } = req.user;
-        const { formData } = req.body;
-        await userService.postWords(_id, formData);
+        const { devTerm, commonPron, awkPron, addInfo } = req.body.formData; // 각 필드를 분리
+        console.log(req.body, req.body.formData, { devTerm, commonPron, awkPron, addInfo }, 111);
+        const newWord = await userService.postWords(_id, { devTerm, commonPron, awkPron, addInfo }); // userId와 formData를 서비스 함수로 전달
         sendResponse.ok(res, {
             message: SuccessMessage.REGISTER_WORDS_SUCCESS,
+            data: newWord
         });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         sendResponse.fail(req, res, ErrorMessage.REGISTER_WORDS_ERROR);
     }
-}; 
+};
+
+
