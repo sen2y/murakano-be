@@ -1,4 +1,5 @@
 const userRepository = require('./user.repository');
+const wordRepository = require('../word/word.repository');
 
 exports.register = async (userData) => {
     const newUser = {
@@ -41,5 +42,58 @@ exports.delRecentSearch = async (userId, searchTerm) => {
 exports.updateRecentSearch = async (userID, searchTerm) => {
     if (userID) {
         await userRepository.updateRecentSearch(userID, searchTerm);
+    }
+};
+
+// 단어 추가 및 수정
+exports.postWords = async (userId, formData, nickname, type) => {
+    try {
+        const word = await userRepository.postWords(userId, formData, nickname, type);
+        return word;
+    } catch (error) {
+        console.error('Error in userService.postWords:', error.message);
+        throw new Error('Error processing word: ' + error.message);
+    }
+};
+exports.getUserRequests = async (userId) => {
+    const requests = await userRepository.getUserRequests(userId);
+    return requests;
+};
+
+exports.getUserRequestsAll = async () => {
+    const requests = await userRepository.getUserRequestsAll();
+    return requests;
+};
+
+exports.deleteRequest = async (userId, requestWord) => {
+    const result = await userRepository.deleteRequest(userId, requestWord);
+    return result;
+};
+
+exports.getRole = async (userId) => {
+    const role = await userRepository.getRole(userId);
+    return role;
+};
+
+exports.updateRequest = async (requestId, formData) => {
+    if(requestId) {
+        await userRepository.updateRequest(requestId, formData);
+    }
+};
+
+exports.updateRequestState = async (userId, requestId, status, formData, requestType) => {
+    if (userId) {
+        console.log("업데이트 서비스 진입!!!!!!!!!!!!", userId, requestId, status, formData, requestType)
+        await userRepository.updateRequestState(userId, requestId, status, formData);
+        if (requestType === 'add') {
+            await wordRepository.addWord(requestId, formData);
+            await userRepository.updateRequest(requestId, formData); //수정값 사용자 요청 업데이트
+        } else if (requestType === 'mod') {
+            await wordRepository.updateWord(requestId, formData);
+            await userRepository.updateRequest(requestId, formData); //수정값 사용자 요청 업데이트
+        } else {
+            console.log("requestType 오류")
+            return;
+        }
     }
 };

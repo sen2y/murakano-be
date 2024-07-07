@@ -2,6 +2,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../../common/config');
 
+
 const userService = require('./user.service');
 const sendResponse = require('../../common/utils/response-handler');
 const ErrorMessage = require('../../common/constants/error-message');
@@ -218,3 +219,97 @@ exports.delRecentSearch = async (req, res) => {
         sendResponse.fail(req, res, ErrorMessage.DELETE_RECENT_WORD_ERROR);
     }
 };
+
+// 새로운 단어 등록 및 수정
+exports.postWords = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const { nickname } = req.params; // URL 파라미터에서 nickname 추출
+        const { formData, type } = req.body; // formData와 type을 요청 본문에서 분리
+
+        const result = await userService.postWords(_id, formData, nickname, type);
+
+        sendResponse.ok(res, {
+            message: SuccessMessage.REGISTER_WORDS_SUCCESS,
+            data: result
+        });
+    } catch (error) {
+        console.log("Error during postWords:", error);
+        sendResponse.fail(req, res, ErrorMessage.REGISTER_WORDS_ERROR);
+    }
+};
+exports.UserRequests = async (req, res) => {
+    try{
+        const { _id } = req.user;
+        const requests = await userService.getUserRequests(_id);
+        sendResponse.ok(res, {
+            message: SuccessMessage.GET_REQUESTS_SUCCESS,
+            data: { requests },
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.GET_REQUESTS_ERROR);
+    }
+};
+
+exports.UserRequestsAll = async (req, res) => {
+    try{
+        const requests = await userService.getUserRequestsAll();
+        sendResponse.ok(res, {
+            message: SuccessMessage.GET_REQUESTS_SUCCESS,
+            data: { requests },
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.GET_REQUESTS_ERROR);
+    }
+}
+
+exports.deleteRequest = async (req, res) => {
+    try{
+        const { _id } = req.user; // 현재 로그인한 사용자의 고유 식별자
+        const { word } = req.params;
+        await userService.deleteRequest(_id, word);
+        sendResponse.ok(res, {
+            message: SuccessMessage.DELETE_REQUEST_SUCCESS,
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.DELETE_REQUEST_ERROR);
+    }
+}
+
+exports.getRole = async (req, res) => {
+    const { _id } = req.user;
+    const role = await userService.getRole(_id);
+    sendResponse.ok(res, {
+        message: SuccessMessage.GET_ROLE_SUCCESS,
+        data: { role },
+    });
+}
+
+exports.updateRequest = async (req, res) => {
+    const { requestId } = req.params;
+    const { formData } = req.body;
+    await userService.updateRequest(requestId, formData);
+    sendResponse.ok(res, {
+        message: SuccessMessage.UPDATE_REQUEST_SUCCESS
+    });
+}
+
+exports.updateRequestState = async (req, res) => {
+    try {
+        const { _id} = req.user;
+        const { requestId } = req.params;
+        const { status, formData, requestType } = req.body;
+
+        await userService.updateRequestState(_id, requestId, status, formData, requestType);
+        sendResponse.ok(res, {
+            message: SuccessMessage.UPDATE_REQUEST_STATE_SUCCESS,
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.UPDATE_REQUEST_STATE_ERROR);
+    }
+}
+

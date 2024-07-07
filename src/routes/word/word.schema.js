@@ -22,4 +22,22 @@ const searchTermSchema = {
     additionalProperties: false,
 };
 
-module.exports = { searchTermSchema, relatedTermSchema };
+const wordListSchema = {
+    type: 'object',
+    properties: {
+        limit: {
+            type: 'number',
+        },
+        page: {
+            type: 'number',
+        },
+        sort: {
+            type: 'string',
+            enum: ['asc', 'desc', 'popularity', 'recent'],
+        },
+    },
+    required: ['limit', 'page', 'sort'],
+    additionalProperties: false,
+};
+
+module.exports = { searchTermSchema, relatedTermSchema, wordListSchema };
