@@ -1,4 +1,5 @@
 const Word = require('./word.model');
+const User = require('../user/user.model');
 
 exports.getSearchWords = async (searchTerm) => {
     try {
@@ -41,3 +42,54 @@ exports.getRelatedWords = async (searchTerm, limit) => {
     }
 };
 
+// 전체 단어목록 조회, 정렬 별 조건함수
+exports.getAllWords = async (isSorted, page, limit) => {
+    try {
+        const skip = (page - 1) * limit;
+        const sortOrder = {};
+        if (isSorted === 'asc' || isSorted === 'desc') {
+            sortOrder.word = isSorted === 'asc' ? 1 : -1;
+        } else if (isSorted === 'popularity') {
+            sortOrder.freq = -1;
+        } else if (isSorted === 'recent') {
+            sortOrder.createdAt = -1;
+            sortOrder.word = 1; // createdAt이 동일한 경우 단어 오름차순으로 정렬
+        }
+        const words = await Word.find().sort(sortOrder).skip(skip).limit(parseInt(limit, 10));
+        return words;
+    } catch (error) {
+        console.log('Error while getting all words:', error);
+        return null;
+    }
+};
+
+exports.addWord = async (requestId) => {
+    try {
+        // requestId에 해당하는 request를 찾습니다.
+        const user = await User.findOne({ 'requests._id': requestId });
+        if (!user) {
+            console.log('User with the given request not found');
+            return null;
+        }
+
+        const request = user.requests.id(requestId);
+        if (!request) {
+            console.log('Request not found');
+            return null;
+        }
+
+        const newWord = new Word({
+            word: request.word,
+            awkPron: request.awkPron,
+            comPron: request.comPron,
+            info: request.info,
+            suggestedBy: request.suggestedBy,
+        });
+
+        await newWord.save();
+        console.log('Word added successfully');
+    } catch (error) {
+        console.log('Error while adding word:', error);
+        return null;
+    }
+};
