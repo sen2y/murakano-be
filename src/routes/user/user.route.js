@@ -33,6 +33,6 @@ userRouter.get('/recent', isLoggedIn, recentSearches); // 최근 검색어 조�
 userRouter.delete('/:searchTerm', isLoggedIn, delRecentSearch); // 최근 검색어 삭제
 
 //등록 요청
-userRouter.post('/requests/new', isUser, postWords);
+userRouter.post('/requests/new', isLoggedIn, postWords);
 
 module.exports = userRouter;

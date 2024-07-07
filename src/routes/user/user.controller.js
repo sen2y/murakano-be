@@ -218,13 +218,14 @@ exports.delRecentSearch = async (req, res) => {
         sendResponse.fail(req, res, ErrorMessage.DELETE_RECENT_WORD_ERROR);
     }
 };
+
 // 새로운 단어 등록
 exports.postWords = async (req, res) => {
     try {
         const { _id } = req.user;
         const { devTerm, commonPron, awkPron, addInfo } = req.body.formData; // 각 필드를 분리
         console.log(req.body, req.body.formData, { devTerm, commonPron, awkPron, addInfo }, 111);
-        const newWord = await userService.postWords(_id, { devTerm, commonPron, awkPron, addInfo }); // userId와 formData를 서비스 함수로 전달: type전달
+        const newWord = await userService.postWords(_id, { devTerm, commonPron, awkPron, addInfo }); // userId와 formData를 서비스 함수로 전달
         sendResponse.ok(res, {
             message: SuccessMessage.REGISTER_WORDS_SUCCESS,
             data: newWord
@@ -234,5 +235,3 @@ exports.postWords = async (req, res) => {
         sendResponse.fail(req, res, ErrorMessage.REGISTER_WORDS_ERROR);
     }
 };
-
-
