@@ -81,31 +81,49 @@ exports.updateRecentSearch = async (_id, searchTerm) => {
     }
 };
 
-exports.postWords = async (userId, formData, nickname) => {
+// 단어 추가 및 수정
+exports.postWords = async (userId, formData, nickname, type) => {
     try {
-        console.log("유저레포 닉네임값", nickname)
         const user = await User.findById(userId).select('requests').exec();
         if (!user) {
             throw new Error('User not found');
         }
-        // console.log("유저레포 닉네임값: ", nickname)
-        user.requests.push({
-            word: formData.devTerm,
-            info: formData.addInfo,
-            awkPron: formData.awkPron,
-            comPron: formData.commonPron,
-            deletedAt: null,
-            status: 'pend',
-            type: 'add',
-            suggestedBy: nickname // nickname을 추가
-        });
+
+        if (type === 'add') {
+            user.requests.push({
+                word: formData.devTerm,
+                info: formData.addInfo,
+                awkPron: formData.awkPron,
+                comPron: formData.commonPron,
+                deletedAt: null,
+                status: 'pend',
+                type: 'add',
+                suggestedBy: nickname // nickname 추가
+            });
+        } else if (type === 'mod') {
+            const requestIndex = user.requests.findIndex(req => req.word === formData.devTerm);
+            if (requestIndex !== -1) {
+                user.requests[requestIndex] = {
+                    ...user.requests[requestIndex],
+                    info: formData.addInfo,
+                    awkPron: formData.awkPron,
+                    comPron: formData.commonPron,
+                    type: 'mod',
+                    suggestedBy: nickname,
+                    status: 'pend'
+                };
+            } else {
+                throw new Error('Word not found');
+            }
+        } else {
+            throw new Error('Invalid type');
+        }
 
         await user.save();
-        return user.requests[user.requests.length - 1]; // 새로 추가된 요청 반환
+        return user.requests.find(req => req.word === formData.devTerm);
     } catch (err) {
         console.error(err);
         throw err;
     }
 };
-
 

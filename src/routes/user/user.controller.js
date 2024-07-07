@@ -219,19 +219,20 @@ exports.delRecentSearch = async (req, res) => {
     }
 };
 
-// 새로운 단어 등록
+// 새로운 단어 등록 및 수정
 exports.postWords = async (req, res) => {
     try {
         const { _id } = req.user;
-        const { nickname } = req.params; // nickname을 req.body에서 가져옴
-        const { formData } = req.body; // formData 구조를 분리
+        const { nickname } = req.params; // URL 파라미터에서 nickname 추출
+        const { formData, type } = req.body; // formData와 type을 요청 본문에서 분리
 
-        console.log("유저 컨트롤러 값", _id, nickname, formData )
+        console.log("유저 컨트롤러 값", _id, nickname, formData, type);
 
-        const newWord = await userService.postWords(_id, formData, nickname); // userId와 formData를 서비스 함수로 전달
+        const result = await userService.postWords(_id, formData, nickname, type);
+
         sendResponse.ok(res, {
             message: SuccessMessage.REGISTER_WORDS_SUCCESS,
-            data: newWord
+            data: result
         });
     } catch (error) {
         console.log(error);

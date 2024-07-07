@@ -44,13 +44,12 @@ exports.updateRecentSearch = async (userID, searchTerm) => {
     }
 };
 
-// 새로운 단어 생성
-// 새로운 단어 생성
-exports.postWords = async (userId, formData, nickname) => {
+// 단어 추가 및 수정
+exports.postWords = async (userId, formData, nickname, type) => {
     try {
-        const newWord = await userRepository.postWords(userId, formData, nickname);
-        return newWord;
+        const word = await userRepository.postWords(userId, formData, nickname, type);
+        return word;
     } catch (error) {
-        throw new Error('Error creating new word');
+        throw new Error('Error processing word');
     }
 };
