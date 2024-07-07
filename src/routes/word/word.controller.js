@@ -61,6 +61,7 @@ exports.getRelatedWords = async (req, res) => {
     }
 };
 
+// 전체 단어목록 조회
 exports.getAllWords = async (req, res) => {
     try {
         // 최초 페이지 로딩시, 최신 순으로 노출
