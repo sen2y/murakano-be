@@ -50,6 +50,7 @@ exports.postWords = async (userId, formData, nickname, type) => {
         const word = await userRepository.postWords(userId, formData, nickname, type);
         return word;
     } catch (error) {
-        throw new Error('Error processing word');
+        console.error('Error in userService.postWords:', error.message);
+        throw new Error('Error processing word: ' + error.message);
     }
 };

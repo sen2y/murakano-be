@@ -226,7 +226,10 @@ exports.postWords = async (req, res) => {
         const { nickname } = req.params; // URL 파라미터에서 nickname 추출
         const { formData, type } = req.body; // formData와 type을 요청 본문에서 분리
 
-        console.log("유저 컨트롤러 값", _id, nickname, formData, type);
+        console.log("User ID:", _id);
+        console.log("Nickname:", nickname);
+        console.log("Form Data:", formData);
+        console.log("Type:", type);
 
         const result = await userService.postWords(_id, formData, nickname, type);
 
@@ -235,7 +238,7 @@ exports.postWords = async (req, res) => {
             data: result
         });
     } catch (error) {
-        console.log(error);
+        console.log("Error during postWords:", error);
         sendResponse.fail(req, res, ErrorMessage.REGISTER_WORDS_ERROR);
     }
 };
