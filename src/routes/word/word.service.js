@@ -19,7 +19,7 @@ exports.getRelatedWords = async (searchTerm, limit) => {
 };
 
 // 전체 단어 목록 조회 & 정렬 (최초 로딩시, 최신순 정렬)
-exports.getAllWords = async (Sort = 'recent', page = 1, limit = 10) => {
-    const words = await wordRepository.getAllWords(Sort, page, limit);
+exports.getAllWords = async (sort = 'recent', page = 1, limit = 10) => {
+    const words = await wordRepository.getAllWords(sort, page, limit);
     return words;
 };
