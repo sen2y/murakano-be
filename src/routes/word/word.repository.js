@@ -43,7 +43,7 @@ exports.getRelatedWords = async (searchTerm, limit) => {
 };
 
 // 전체 단어목록 조회, 정렬 별 조건함수
-exports.getAllWords = async (isSorted, page = 1, limit = 10) => {
+exports.getAllWords = async (isSorted, page, limit) => {
     try {
         const skip = (page - 1) * limit;
         const sortOrder = {};
