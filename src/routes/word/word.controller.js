@@ -64,10 +64,10 @@ exports.getRelatedWords = async (req, res) => {
 exports.getAllWords = async (req, res) => {
     try {
         // 최초 페이지 로딩시, 최신 순으로 노출
-        const { sort = 'recent', page = 1, limit = 10 } = req.query;
-        console.log(`Sort: ${sort}, Page: ${page}, Limit: ${limit}`);
+        const { Sort = 'recent', page = 1, limit = 10 } = req.query;
+        console.log(`Sort: ${Sort}, Page: ${page}, Limit: ${limit}`);
 
-        const data = await wordService.getAllWords(sort, parseInt(page, 10), parseInt(limit, 10));
+        const data = await wordService.getAllWords(Sort, parseInt(page, 10), parseInt(limit, 10));
 
         sendResponse.ok(res, {
             message: SucesssMessage.GET_WORDS_SUCCESS,
