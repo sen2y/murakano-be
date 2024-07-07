@@ -13,7 +13,7 @@ exports.getSearchWords = async (req, res) => {
         // 검색어 검증
         const validData = validateRequest(searchTermSchema, req.params);
         // 요청 파라미터에서 검색어 추출
-        const searchTerm = validData.searchTerm;
+        let searchTerm = validData.searchTerm;
         // 검색어 조회
         const data = await wordService.getSearchWords(searchTerm);
         if (_id) {
