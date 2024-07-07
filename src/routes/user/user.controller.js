@@ -226,11 +226,6 @@ exports.postWords = async (req, res) => {
         const { nickname } = req.params; // URL 파라미터에서 nickname 추출
         const { formData, type } = req.body; // formData와 type을 요청 본문에서 분리
 
-        console.log("User ID:", _id);
-        console.log("Nickname:", nickname);
-        console.log("Form Data:", formData);
-        console.log("Type:", type);
-
         const result = await userService.postWords(_id, formData, nickname, type);
 
         sendResponse.ok(res, {
