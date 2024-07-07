@@ -81,63 +81,6 @@ exports.updateRecentSearch = async (_id, searchTerm) => {
     }
 };
 
-// exports.postWords = async (userId, formData, nickname, type) => {
-//     try {
-//         const user = await User.findById(userId).exec();
-//         if (!user) {
-//             throw new Error('User not found');
-//         }
-
-//         let wordExists = false;
-
-//         // 요청 목록을 순회하며 단어를 수정하거나 확인
-//         user.requests = user.requests.map(req => {
-//             if (req.word.toLowerCase() === formData.devTerm.toLowerCase()) {
-//                 wordExists = true;
-
-//                 // 수정 요청인 경우, 기존 단어 정보를 업데이트
-//                 if (type === 'mod') {
-//                     return {
-//                         ...req,
-//                         info: formData.addInfo,
-//                         awkPron: formData.awkPron,
-//                         comPron: formData.commonPron,
-//                         type: 'mod',
-//                         suggestedBy: nickname,
-//                         status: 'pend'
-//                     };
-//                 }
-//             }
-//             return req;
-//         });
-
-//         // 추가 요청인 경우, 기존 단어가 없을 때만 추가
-//         if (type === 'add') {
-//             if (!wordExists) {
-//                 user.requests.push({
-//                     word: formData.devTerm,
-//                     info: formData.addInfo,
-//                     awkPron: formData.awkPron,
-//                     comPron: formData.commonPron,
-//                     deletedAt: null,
-//                     status: 'pend',
-//                     type: 'add',
-//                     suggestedBy: nickname
-//                 });
-//             } else {
-//                 throw new Error('Word already exists in user requests');
-//             }
-//         }
-
-//         await user.save();
-//         console.log("User after modification:", JSON.stringify(user.requests, null, 2));
-//         return user.requests.find(req => req.word.toLowerCase() === formData.devTerm.toLowerCase());
-//     } catch (err) {
-//         console.error("Error in postWords:", err);
-//         throw err;
-//     }
-// };
-
 // 단어 추가 및 수정
 exports.postWords = async (userId, formData, nickname, type) => {
     try {
