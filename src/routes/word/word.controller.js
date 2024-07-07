@@ -5,7 +5,6 @@ const ErrorMessage = require('../../common/constants/error-message');
 const SuccessMessage = require('../../common/constants/success-message');
 const { validateRequest } = require('../../common/utils/request.validator');
 const { searchTermSchema, relatedTermSchema, wordListSchema } = require('./word.schema');
-const { request } = require('express');
 
 // 검색어 조회
 exports.getSearchWords = async (req, res) => {
@@ -77,7 +76,7 @@ exports.getAllWords = async (req, res) => {
         const data = await wordService.getAllWords(sort, page, limit);
 
         sendResponse.ok(res, {
-            message: SucesssMessage.GET_WORDS_SUCCESS,
+            message: SuccessMessage.GET_WORDS_SUCCESS,
             data,
         });
     } catch (error) {
