@@ -81,8 +81,9 @@ exports.updateRecentSearch = async (_id, searchTerm) => {
     }
 };
 
-exports.postWords = async (userId, formData) => {
+exports.postWords = async (userId, formData, nickname) => {
     try {
+        console.log("유저레포 닉네임값", nickname)
         const user = await User.findById(userId).select('requests').exec();
         if (!user) {
             throw new Error('User not found');
@@ -96,7 +97,7 @@ exports.postWords = async (userId, formData) => {
             deletedAt: null,
             status: 'pend',
             type: 'add',
-            // suggestedBy: nickname
+            suggestedBy: nickname // nickname을 추가
         });
 
         await user.save();
@@ -106,3 +107,5 @@ exports.postWords = async (userId, formData) => {
         throw err;
     }
 };
+
+

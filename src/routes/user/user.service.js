@@ -45,10 +45,10 @@ exports.updateRecentSearch = async (userID, searchTerm) => {
 };
 
 // 새로운 단어 생성
-// NICKNAME 인자값 추가 
-exports.postWords = async (userId, formData) => {
+// 새로운 단어 생성
+exports.postWords = async (userId, formData, nickname) => {
     try {
-        const newWord = await userRepository.postWords(userId, formData);
+        const newWord = await userRepository.postWords(userId, formData, nickname);
         return newWord;
     } catch (error) {
         throw new Error('Error creating new word');
