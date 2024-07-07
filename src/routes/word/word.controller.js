@@ -2,7 +2,7 @@ const wordService = require('./word.service');
 const userService = require('../user/user.service');
 const sendResponse = require('../../common/utils/response-handler');
 const ErrorMessage = require('../../common/constants/error-message');
-const SucesssMessage = require('../../common/constants/success-message');
+const SuccessMessage = require('../../common/constants/success-message');
 const { validateRequest } = require('../../common/utils/request.validator');
 const { searchTermSchema, relatedTermSchema, wordListSchema } = require('./word.schema');
 const { request } = require('express');
@@ -20,7 +20,7 @@ exports.getSearchWords = async (req, res) => {
         if (_id) {
             await userService.updateRecentSearch(_id, searchTerm);
         }
-        const message = data ? SucesssMessage.SEARCH_WORDS_SUCCESS : SucesssMessage.SEARCH_WORDS_NONE;
+        const message = data ? SuccessMessage.SEARCH_WORDS_SUCCESS : SuccessMessage.SEARCH_WORDS_NONE;
         sendResponse.ok(res, {
             message,
             data,
@@ -39,7 +39,7 @@ exports.getRankWords = async (req, res) => {
     try {
         const data = await wordService.getRankWords();
         sendResponse.ok(res, {
-            message: SucesssMessage.RANK_WORDS_SUCCESS,
+            message: SuccessMessage.RANK_WORDS_SUCCESS,
             data,
         });
     } catch (error) {
@@ -54,7 +54,7 @@ exports.getRelatedWords = async (req, res) => {
         searchTerm = validateRequest(relatedTermSchema, searchTerm);
         const data = await wordService.getRelatedWords(searchTerm, limit);
         sendResponse.ok(res, {
-            message: SucesssMessage.RELATED_WORDS_SUCCESS,
+            message: SuccessMessage.RELATED_WORDS_SUCCESS,
             data,
         });
     } catch (error) {

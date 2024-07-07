@@ -31,6 +31,9 @@ const SuccessMessage = Object.freeze({
     // WORD - 조회
     GET_WORDS_SUCCESS: '단어 조회 성공',
     RELATED_WORDS_SUCCESS: '연관 검색어 조회 성공',
+
+    // Word - 등록요청
+    REGISTER_WORDS_SUCCESS: '등록 요청 성공',
 });
 
 module.exports = SuccessMessage;

@@ -45,6 +45,16 @@ exports.updateRecentSearch = async (userID, searchTerm) => {
     }
 };
 
+// 단어 추가 및 수정
+exports.postWords = async (userId, formData, nickname, type) => {
+    try {
+        const word = await userRepository.postWords(userId, formData, nickname, type);
+        return word;
+    } catch (error) {
+        console.error('Error in userService.postWords:', error.message);
+        throw new Error('Error processing word: ' + error.message);
+    }
+};
 exports.getUserRequests = async (userId) => {
     const requests = await userRepository.getUserRequests(userId);
     return requests;

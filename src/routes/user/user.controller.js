@@ -220,6 +220,24 @@ exports.delRecentSearch = async (req, res) => {
     }
 };
 
+// 새로운 단어 등록 및 수정
+exports.postWords = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const { nickname } = req.params; // URL 파라미터에서 nickname 추출
+        const { formData, type } = req.body; // formData와 type을 요청 본문에서 분리
+
+        const result = await userService.postWords(_id, formData, nickname, type);
+
+        sendResponse.ok(res, {
+            message: SuccessMessage.REGISTER_WORDS_SUCCESS,
+            data: result
+        });
+    } catch (error) {
+        console.log("Error during postWords:", error);
+        sendResponse.fail(req, res, ErrorMessage.REGISTER_WORDS_ERROR);
+    }
+};
 exports.UserRequests = async (req, res) => {
     try{
         const { _id } = req.user;

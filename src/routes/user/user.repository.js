@@ -86,6 +86,57 @@ exports.updateRecentSearch = async (_id, searchTerm) => {
     }
 };
 
+// 단어 추가 및 수정
+exports.postWords = async (userId, formData, nickname, type) => {
+    try {
+        const user = await User.findById(userId).exec();
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        console.log("User before modification:", JSON.stringify(user.requests, null, 2));
+
+        if (type === 'add') {
+            user.requests.push({
+                word: formData.devTerm,
+                info: formData.addInfo,
+                awkPron: formData.awkPron,
+                comPron: formData.commonPron,
+                deletedAt: null,
+                status: 'pend',
+                type: 'add',
+                suggestedBy: nickname // nickname 추가
+            });
+        } else if (type === 'mod') {
+            const request = user.requests.find(req => req.word === formData.devTerm);
+            if (!request) {
+                user.requests.push({
+                    word: formData.devTerm,
+                    info: formData.addInfo,
+                    awkPron: formData.awkPron,
+                    comPron: formData.commonPron,
+                    deletedAt: null,
+                    status: 'pend',
+                    type: 'mod',
+                    suggestedBy: nickname // nickname 추가
+                })
+            } else {
+                console.log('이미 같은 단어 수정 요청이 존재합니다.');
+                throw new Error('Word not found');
+            }
+        } else {
+            throw new Error('Invalid type');
+        }
+
+        await user.save();
+        console.log("User after modification:", JSON.stringify(user.requests, null, 2));
+        return user.requests.find(req => req.word === formData.devTerm);
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+};
+
 exports.getUserRequests = async (userId) => {
     try { 
         const user = await User.findById(userId).select('requests').exec();
@@ -153,7 +204,6 @@ exports.getRole = async (userId) => {
 
 exports.updateRequest = async (requestId, formData) => {
     try {
-        console.log("updateRequest 레포진입!!!!!!!!!!!!", requestId, formData)
         const user = await User.findOne({ 'requests._id': requestId }).select('requests').exec();
         if (!user) {
             throw new Error('User not found');
@@ -201,5 +251,4 @@ exports.updateRequestState = async (userId, requestId, status) => {
 
     } catch (err) {
         console.error(err);
-    }
-};
+    }}
