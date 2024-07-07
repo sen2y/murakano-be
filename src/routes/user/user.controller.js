@@ -237,4 +237,3 @@ exports.postWords = async (req, res) => {
         sendResponse.fail(req, res, ErrorMessage.REGISTER_WORDS_ERROR);
     }
 };
-
