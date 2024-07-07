@@ -87,7 +87,7 @@ exports.postWords = async (userId, formData) => {
         if (!user) {
             throw new Error('User not found');
         }
-
+//if type 등록
         user.requests.push({
             word: formData.devTerm,
             info: formData.addInfo,
@@ -97,7 +97,7 @@ exports.postWords = async (userId, formData) => {
             status: 'pend',
             type: 'add'
         });
-
+//else if type:'mod', db에서 있는 단어인지 체크한 후에 수정, 기여자 이름 추가
         await user.save();
         return user.requests[user.requests.length - 1]; // 새로 추가된 요청 반환
     } catch (err) {
