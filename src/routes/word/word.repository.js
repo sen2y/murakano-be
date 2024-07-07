@@ -1,4 +1,5 @@
 const Word = require('./word.model');
+const User = require('../user/user.model');
 
 exports.getSearchWords = async (searchTerm) => {
     try {
@@ -36,6 +37,38 @@ exports.getRelatedWords = async (searchTerm, limit) => {
         return wordNames;
     } catch (error) {
         console.log('Error while getting related words:', error);
+        return null;
+    }
+};
+
+exports.addWord = async (requestId) => {
+    try {
+        // requestId에 해당하는 request를 찾습니다.
+        const user = await User.findOne({ 'requests._id': requestId });
+        if (!user) {
+            console.log('User with the given request not found');
+            return null;
+        }
+
+        const request = user.requests.id(requestId);
+        if (!request) {
+            console.log('Request not found');
+            return null;
+        }
+
+        const newWord = new Word({
+            word: request.word,
+            awkPron: request.awkPron,
+            comPron: request.comPron,
+            info: request.info,
+            suggestedBy: request.suggestedBy,
+        });
+
+        await newWord.save();
+        console.log('Word added successfully');
+
+    } catch (error) {
+        console.log('Error while adding word:', error);
         return null;
     }
 };

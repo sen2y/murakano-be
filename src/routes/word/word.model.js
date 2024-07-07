@@ -18,16 +18,6 @@ wordSchema.pre(/^findOne/, async function (next) {
     next();
 });
 
-//관리자 승인
-wordSchema.statics.addWord = async function (requestData, userNickname) {
-    const newWord = new this({
-        word: requestData.word,
-        awkPron: requestData.awkPron,
-        comPron: requestData.comPron,
-        info: requestData.info,
-        suggestedBy: userNickname,
-    });
-    await newWord.save();
-};
+
 
 module.exports = mongoose.model('Word', wordSchema);
