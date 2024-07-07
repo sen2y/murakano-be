@@ -3,12 +3,13 @@ const Word = require('./word.model');
 exports.getSearchWords = async (searchTerm) => {
     try {
         // 대소문자 구분 없이 검색어를 찾기 위한 정규 표현식 사용
-        const searchWords = await Word.findOne({ word: new RegExp(`^${searchTerm}$`, 'i') });
+        const escapedSearchTerm = searchTerm.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+        const searchWords = await Word.findOne({ word: { $regex: `^${escapedSearchTerm}$`, $options: 'i' } });
 
         if (!searchWords) {
             console.log('Search term not found in Word collection');
         }
-
+        console.log(888, searchWords);
         return searchWords;
     } catch (error) {
         console.log('Error while getting search words:', error);
