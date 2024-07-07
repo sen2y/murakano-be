@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 
 const requestSchema = new mongoose.Schema(
     {
-        request_id: { type: mongoose.Schema.Types.ObjectId, default: () => new mongoose.Types.ObjectId(), required: true, index: true, immutable: true },
         word: { type: String, required: true },
         awkPron: [{ type: String }],
         comPron: [
