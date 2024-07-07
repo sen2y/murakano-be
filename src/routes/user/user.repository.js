@@ -204,7 +204,6 @@ exports.getRole = async (userId) => {
 
 exports.updateRequest = async (requestId, formData) => {
     try {
-        console.log("updateRequest 레포진입!!!!!!!!!!!!", requestId, formData)
         const user = await User.findOne({ 'requests._id': requestId }).select('requests').exec();
         if (!user) {
             throw new Error('User not found');
