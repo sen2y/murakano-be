@@ -1,10 +1,7 @@
 const express = require('express');
 const wordRouter = express.Router();
 const { isUser } = require('../../common/utils/auth');
-const { getRankWords, getSearchWords, getRelatedWords} = require('./word.controller');
-
 const { getRankWords, getSearchWords, getRelatedWords, getAllWords } = require('./word.controller');
-const { isLoggedIn, isUser } = require('../../common/utils/auth');
 
 // 전체 단어 목록 (쿼리 스트링에 정렬 & 페이지 정보)
 wordRouter.get('/', getAllWords);
