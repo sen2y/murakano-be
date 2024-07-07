@@ -84,10 +84,12 @@ exports.updateRecentSearch = async (_id, searchTerm) => {
 // 단어 추가 및 수정
 exports.postWords = async (userId, formData, nickname, type) => {
     try {
-        const user = await User.findById(userId).select('requests').exec();
+        const user = await User.findById(userId).exec();
         if (!user) {
             throw new Error('User not found');
         }
+
+        console.log("User before modification:", JSON.stringify(user.requests, null, 2));
 
         if (type === 'add') {
             user.requests.push({
@@ -101,18 +103,16 @@ exports.postWords = async (userId, formData, nickname, type) => {
                 suggestedBy: nickname // nickname 추가
             });
         } else if (type === 'mod') {
-            const requestIndex = user.requests.findIndex(req => req.word === formData.devTerm);
-            if (requestIndex !== -1) {
-                user.requests[requestIndex] = {
-                    ...user.requests[requestIndex],
-                    info: formData.addInfo,
-                    awkPron: formData.awkPron,
-                    comPron: formData.commonPron,
-                    type: 'mod',
-                    suggestedBy: nickname,
-                    status: 'pend'
-                };
+            const request = user.requests.find(req => req.word === formData.devTerm);
+            if (request) {
+                request.info = formData.addInfo;
+                request.awkPron = formData.awkPron;
+                request.comPron = formData.commonPron;
+                request.type = 'mod';
+                request.suggestedBy = nickname;
+                request.status = 'pend';
             } else {
+                console.log('Word not found in user requests');
                 throw new Error('Word not found');
             }
         } else {
@@ -120,6 +120,7 @@ exports.postWords = async (userId, formData, nickname, type) => {
         }
 
         await user.save();
+        console.log("User after modification:", JSON.stringify(user.requests, null, 2));
         return user.requests.find(req => req.word === formData.devTerm);
     } catch (err) {
         console.error(err);
