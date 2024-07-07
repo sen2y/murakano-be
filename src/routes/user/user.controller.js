@@ -2,6 +2,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const config = require('../../common/config');
 
+
 const userService = require('./user.service');
 const sendResponse = require('../../common/utils/response-handler');
 const ErrorMessage = require('../../common/constants/error-message');
@@ -250,8 +251,6 @@ exports.deleteRequest = async (req, res) => {
     try{
         const { _id } = req.user; // 현재 로그인한 사용자의 고유 식별자
         const { word } = req.params;
-        console.log("컨트롤러 _id:", _id);
-        console.log("컨트롤러 word:", word);
         await userService.deleteRequest(_id, word);
         sendResponse.ok(res, {
             message: SuccessMessage.DELETE_REQUEST_SUCCESS,
@@ -272,7 +271,6 @@ exports.getRole = async (req, res) => {
 }
 
 exports.updateRequest = async (req, res) => {
-    console.log("사용자 요청 수정 user controller")
     const { _id } = req.user;
     const { word } = req.params;
     const { formData } = req.body;
@@ -281,3 +279,22 @@ exports.updateRequest = async (req, res) => {
         message: SuccessMessage.UPDATE_REQUEST_SUCCESS
     });
 }
+
+exports.updateRequestState = async (req, res) => {
+    try {
+        const { _id} = req.user;
+        const { requestId } = req.params;
+        const { status } = req.body;
+
+        console.log("요청업데이트컨트롤러 진입!!!!", _id, requestId, status)
+
+        await userService.updateRequestState(_id, requestId, status);
+        sendResponse.ok(res, {
+            message: SuccessMessage.UPDATE_REQUEST_STATE_SUCCESS,
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.UPDATE_REQUEST_STATE_ERROR);
+    }
+}
+

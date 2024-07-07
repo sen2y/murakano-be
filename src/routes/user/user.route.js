@@ -15,6 +15,7 @@ const {
     deleteRequest,
     updateRequest,
     getRole,
+    updateRequestState,
 } = require('./user.controller');
 const { isLoggedIn, isNotLoggedIn } = require('../../common/utils/auth');
 const userRouter = express.Router();
@@ -42,5 +43,9 @@ userRouter.get('/requests/all', isLoggedIn, UserRequestsAll); // 모든 요청 �
 userRouter.get('/role', isLoggedIn, getRole); // 사용자 역할 가져오기
 userRouter.delete('/requests/:word', isLoggedIn, deleteRequest); // 사용자 요청 삭제
 userRouter.post('/requests/:word', isLoggedIn, updateRequest); // 사용자 요청 수정
+
+
+//요청 상태 변경 
+userRouter.post('/requests/:requestId/status', isLoggedIn, updateRequestState); // 사용자 요청 status 변경
 
 module.exports = userRouter;

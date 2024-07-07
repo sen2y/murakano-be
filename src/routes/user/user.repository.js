@@ -1,5 +1,6 @@
 const User = require('./user.model');
 const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Types;
 
 exports.createUser = async (userData) => {
     try {
@@ -64,7 +65,7 @@ exports.updateRecentSearch = async (_id, searchTerm) => {
         if (!user) {
             console.log('User not found');
         }
-        const recentSearch = user.recentSearches.find((search) => search.searchTerm === searchTerm);f
+        const recentSearch = user.recentSearches.find((search) => search.searchTerm === searchTerm);
         console.log("recentSearch", recentSearch)
         if (recentSearch) {
             // 검색어가 이미 존재하는 경우
@@ -103,7 +104,6 @@ exports.getUserRequests = async (userId) => {
 exports.getUserRequestsAll = async () => {
     try {
         const users = await User.find({}, { requests: 1, _id: 0 }); // 모든 유저의 requests 필드만 가져옴
-        console.log("users", users)
         const allRequests = [];
 
         users.forEach(user => {
@@ -127,8 +127,6 @@ exports.deleteRequest = async (userId, requestWord) => {
             console.log("사용자를 찾을 수 없음");
             throw new Error('User not found');
         }
-
-        console.log("사용자 요청 목록:", user.requests);
 
         const request = user.requests.find(req => req.word === requestWord && req.deletedAt === null);
         if (request) {
@@ -163,21 +161,15 @@ exports.updateRequest = async (userId, requestWord, formData) => {
         const request = user.requests.find(req => req.word === requestWord && req.deletedAt === null);
         if (request) {
             // formData의 각 속성 값으로 request의 해당 속성 값 업데이트
-            console.log("formData", formData)
-            console.log("request", request.info)
 
             if (formData.addInfo !== undefined) {
-                request.info = formData.addInfo;
-            }
+                request.info = formData.addInfo;}
             if (formData.awkPron !== undefined) {
-                request.awkPron = formData.awkPron;
-            }
+                request.awkPron = formData.awkPron;}
             if (formData.commonPron !== undefined) {
-                request.comPron = formData.commonPron;
-            }
+                request.comPron = formData.commonPron;}
             if (formData.devTerm !== undefined) {
-                request.word = formData.devTerm;
-            }
+                request.word = formData.devTerm;}
 
             await user.save();
 
@@ -187,3 +179,23 @@ exports.updateRequest = async (userId, requestWord, formData) => {
         console.error(err);
     }
 }
+
+exports.updateRequestState = async (userId, requestId, status) => {
+    try {
+
+        const user = await User.findOneAndUpdate(
+            { 'requests._id': requestId },
+            { $set: { 'requests.$.status': status } },
+            { new: true }
+        ).exec();
+
+        if (!user) {
+            console.log('Request not found');
+        } else {
+            console.log('Request status updated successfully');
+        }
+
+    } catch (err) {
+        console.error(err);
+    }
+};
