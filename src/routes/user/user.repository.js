@@ -202,38 +202,42 @@ exports.getRole = async (userId) => {
     }
 }
 
-exports.updateRequest = async (userId, requestWord, formData) => {
+exports.updateRequest = async (requestId, formData) => {
     try {
-        const user = await User.findById(userId).select('requests').exec();
-
+        console.log("updateRequest 레포진입!!!!!!!!!!!!", requestId, formData)
+        const user = await User.findOne({ 'requests._id': requestId }).select('requests').exec();
         if (!user) {
             throw new Error('User not found');
         }
-        const request = user.requests.find(req => req.word === requestWord && req.deletedAt === null);
+
+        const request = user.requests.find(req => req._id.toString() === requestId && req.deletedAt === null);
         if (request) {
             // formData의 각 속성 값으로 request의 해당 속성 값 업데이트
-
             if (formData.addInfo !== undefined) {
-                request.info = formData.addInfo;}
+                request.info = formData.addInfo;
+            }
             if (formData.awkPron !== undefined) {
-                request.awkPron = formData.awkPron;}
+                request.awkPron = formData.awkPron;
+            }
             if (formData.commonPron !== undefined) {
-                request.comPron = formData.commonPron;}
+                request.comPron = formData.commonPron;
+            }
             if (formData.devTerm !== undefined) {
-                request.word = formData.devTerm;}
+                request.word = formData.devTerm;
+            }
 
             await user.save();
-
         } else {
+            console.log('Request not found or already deleted');
         }
     } catch (err) {
         console.error(err);
     }
-}
+};
 
 exports.updateRequestState = async (userId, requestId, status) => {
     try {
-
+        console.log("updateRequestState 레포진입!!!!!!!!!!!!", userId, requestId, status)
         const user = await User.findOneAndUpdate(
             { 'requests._id': requestId },
             { $set: { 'requests.$.status': status } },

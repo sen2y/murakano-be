@@ -47,7 +47,7 @@ userRouter.get('/requests', isLoggedIn, UserRequests); // 요청 목록 조회
 userRouter.get('/requests/all', isLoggedIn, UserRequestsAll); // 모든 요청 목록 조회
 userRouter.get('/role', isLoggedIn, getRole); // 사용자 역할 가져오기
 userRouter.delete('/requests/:word', isLoggedIn, deleteRequest); // 사용자 요청 삭제
-userRouter.post('/requests/:word', isLoggedIn, updateRequest); // 사용자 요청 수정
+userRouter.post('/requests/:requestId', isLoggedIn, updateRequest); // 사용자 요청 수정
 
 
 //요청 상태 변경 

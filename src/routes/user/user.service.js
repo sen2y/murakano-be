@@ -75,16 +75,25 @@ exports.getRole = async (userId) => {
     return role;
 };
 
-exports.updateRequest = async (userId, requestWord, formData) => {
-    if(userId) {
-        await userRepository.updateRequest(userId, requestWord, formData);
+exports.updateRequest = async (requestId, formData) => {
+    if(requestId) {
+        await userRepository.updateRequest(requestId, formData);
     }
 };
 
-exports.updateRequestState = async (userId, requestId, status) => {
-    if(userId) {
-        await userRepository.updateRequestState(userId, requestId, status);
-        await wordRepository.addWord(requestId);
+exports.updateRequestState = async (userId, requestId, status, formData, requestType) => {
+    if (userId) {
+        console.log("업데이트 서비스 진입!!!!!!!!!!!!", userId, requestId, status, formData, requestType)
+        await userRepository.updateRequestState(userId, requestId, status, formData);
+        if (requestType === 'add') {
+            await wordRepository.addWord(requestId, formData);
+            await userRepository.updateRequest(requestId, formData); //수정값 사용자 요청 업데이트
+        } else if (requestType === 'mod') {
+            await wordRepository.updateWord(requestId, formData);
+            await userRepository.updateRequest(requestId, formData); //수정값 사용자 요청 업데이트
+        } else {
+            console.log("requestType 오류")
+            return;
+        }
     }
-    //promise.all 사용 
 };
