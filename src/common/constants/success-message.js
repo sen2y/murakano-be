@@ -27,6 +27,10 @@ const SuccessMessage = Object.freeze({
     GET_ROLE_SUCCESS: '사용자 역할 조회 성공',
     UPDATE_REQUEST_SUCCESS: '요청 수정 성공',
     UPDATE_REQUEST_STATE_SUCCESS: '요청 상태 변경 성공',
+
+    // WORD - 조회
+    GET_WORDS_SUCCESS: '단어 조회 성공',
+    RELATED_WORDS_SUCCESS: '연관 검색어 조회 성공',
 });
 
 module.exports = SuccessMessage;
