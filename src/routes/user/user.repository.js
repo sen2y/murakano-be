@@ -87,7 +87,7 @@ exports.postWords = async (userId, formData) => {
         if (!user) {
             throw new Error('User not found');
         }
-
+        // console.log("유저레포 닉네임값: ", nickname)
         user.requests.push({
             word: formData.devTerm,
             info: formData.addInfo,
@@ -95,7 +95,8 @@ exports.postWords = async (userId, formData) => {
             comPron: formData.commonPron,
             deletedAt: null,
             status: 'pend',
-            type: 'add'
+            type: 'add',
+            // suggestedBy: nickname
         });
 
         await user.save();

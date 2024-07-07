@@ -45,6 +45,7 @@ exports.updateRecentSearch = async (userID, searchTerm) => {
 };
 
 // 새로운 단어 생성
+// NICKNAME 인자값 추가 
 exports.postWords = async (userId, formData) => {
     try {
         const newWord = await userRepository.postWords(userId, formData);
