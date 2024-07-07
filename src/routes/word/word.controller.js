@@ -4,7 +4,8 @@ const sendResponse = require('../../common/utils/response-handler');
 const ErrorMessage = require('../../common/constants/error-message');
 const SucesssMessage = require('../../common/constants/success-message');
 const { validateRequest } = require('../../common/utils/request.validator');
-const { searchTermSchema, relatedTermSchema } = require('./word.schema');
+const { searchTermSchema, relatedTermSchema, wordListSchema } = require('./word.schema');
+const { request } = require('express');
 
 // 검색어 조회
 exports.getSearchWords = async (req, res) => {
@@ -58,5 +59,32 @@ exports.getRelatedWords = async (req, res) => {
         });
     } catch (error) {
         sendResponse.fail(req, res, ErrorMessage.RELATED_WORDS_ERROR);
+    }
+};
+
+// 전체 단어목록 조회
+exports.getAllWords = async (req, res) => {
+    try {
+        const { limit, page, sort } = validateRequest(wordListSchema, {
+            limit: req.query.limit * 1,
+            page: req.query.page * 1,
+            sort: req.query.sort,
+        });
+
+        // 최초 페이지 로딩시, 최신 순으로 노출
+        console.log(`sort: ${sort}, Page: ${page}, Limit: ${limit}`);
+
+        const data = await wordService.getAllWords(sort, page, limit);
+
+        sendResponse.ok(res, {
+            message: SucesssMessage.GET_WORDS_SUCCESS,
+            data,
+        });
+    } catch (error) {
+        console.log(error);
+        if (error?.type) {
+            return sendResponse.badRequest(res, error.message);
+        }
+        sendResponse.fail(req, res, ErrorMessage.GET_WORDS_ERROR);
     }
 };
