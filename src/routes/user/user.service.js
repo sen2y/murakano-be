@@ -1,4 +1,5 @@
 const userRepository = require('./user.repository');
+const wordRepository = require('../word/word.repository');
 
 exports.register = async (userData) => {
     const newUser = {
@@ -42,4 +43,38 @@ exports.updateRecentSearch = async (userID, searchTerm) => {
     if (userID) {
         await userRepository.updateRecentSearch(userID, searchTerm);
     }
+};
+
+exports.getUserRequests = async (userId) => {
+    const requests = await userRepository.getUserRequests(userId);
+    return requests;
+};
+
+exports.getUserRequestsAll = async () => {
+    const requests = await userRepository.getUserRequestsAll();
+    return requests;
+};
+
+exports.deleteRequest = async (userId, requestWord) => {
+    const result = await userRepository.deleteRequest(userId, requestWord);
+    return result;
+};
+
+exports.getRole = async (userId) => {
+    const role = await userRepository.getRole(userId);
+    return role;
+};
+
+exports.updateRequest = async (userId, requestWord, formData) => {
+    if(userId) {
+        await userRepository.updateRequest(userId, requestWord, formData);
+    }
+};
+
+exports.updateRequestState = async (userId, requestId, status) => {
+    if(userId) {
+        await userRepository.updateRequestState(userId, requestId, status);
+        await wordRepository.addWord(requestId);
+    }
+    //promise.all 사용 
 };
