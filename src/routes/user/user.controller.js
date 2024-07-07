@@ -271,10 +271,9 @@ exports.getRole = async (req, res) => {
 }
 
 exports.updateRequest = async (req, res) => {
-    const { _id } = req.user;
-    const { word } = req.params;
+    const { requestId } = req.params;
     const { formData } = req.body;
-    await userService.updateRequest(_id, word, formData);
+    await userService.updateRequest(requestId, formData);
     sendResponse.ok(res, {
         message: SuccessMessage.UPDATE_REQUEST_SUCCESS
     });
@@ -284,11 +283,9 @@ exports.updateRequestState = async (req, res) => {
     try {
         const { _id} = req.user;
         const { requestId } = req.params;
-        const { status } = req.body;
+        const { status, formData, requestType } = req.body;
 
-        console.log("요청업데이트컨트롤러 진입!!!!", _id, requestId, status)
-
-        await userService.updateRequestState(_id, requestId, status);
+        await userService.updateRequestState(_id, requestId, status, formData, requestType);
         sendResponse.ok(res, {
             message: SuccessMessage.UPDATE_REQUEST_STATE_SUCCESS,
         });
