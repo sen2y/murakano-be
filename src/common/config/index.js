@@ -32,6 +32,7 @@ switch (process.env.NODE_ENV) {
             maxAge: 10 * 60 * 1000,
             // sameSite: 'Lax',
             sameSite: 'None',
+            domain: '.murakano.site',
             secure: true,
         };
         conf.cookieInRefreshTokenOptions = {
@@ -39,6 +40,7 @@ switch (process.env.NODE_ENV) {
             maxAge: 12 * 60 * 60 * 1000,
             // sameSite: 'Lax',
             sameSite: 'None',
+            domain: '.murakano.site',
             secure: true,
         };
         conf.envMode = 'prod';
