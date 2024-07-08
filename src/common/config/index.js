@@ -30,16 +30,14 @@ switch (process.env.NODE_ENV) {
         conf.cookieInAccessTokenOptions = {
             httpOnly: false,
             maxAge: 10 * 60 * 1000,
-            // sameSite: 'Lax',
-            sameSite: 'None',
+            sameSite: 'Lax',
             domain: '.murakano.site',
             secure: true,
         };
         conf.cookieInRefreshTokenOptions = {
             httpOnly: true,
             maxAge: 12 * 60 * 60 * 1000,
-            // sameSite: 'Lax',
-            sameSite: 'None',
+            sameSite: 'Lax',
             domain: '.murakano.site',
             secure: true,
         };
