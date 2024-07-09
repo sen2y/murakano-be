@@ -83,7 +83,6 @@ exports.updateRequest = async (requestId, formData) => {
 
 exports.updateRequestState = async (userId, requestId, status, formData, requestType) => {
     if (userId) {
-        console.log("업데이트 서비스 진입!!!!!!!!!!!!", userId, requestId, status, formData, requestType)
         await userRepository.updateRequestState(userId, requestId, status, formData);
         if (requestType === 'add') {
             await wordRepository.addWord(requestId, formData);
