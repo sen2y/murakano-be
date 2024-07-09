@@ -73,8 +73,7 @@ exports.getAllWords = async (isSorted, page, limit) => {
 
 exports.addWord = async (requestId, formData) => {
     try {
-        // requestId에 해당하는 request를 찾습니다.
-        console.log('addWord 진입!!!!!!!!', requestId, formData);
+        // requestId에 해당하는 request를 찾습니다.        
         const user = await User.findOne({ 'requests._id': requestId });
         if (!user) {
             console.log('User with the given request not found');
