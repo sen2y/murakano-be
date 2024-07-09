@@ -236,7 +236,7 @@ exports.postWords = async (req, res) => {
     } catch (error) {
         console.log("Error during postWords:", error);
         if (error?.type === 'ajv') {
-            return sendResponse.badRequest(res, "영어와 기호만 입력 가능합니다.");
+            return sendResponse.badRequest(res, ErrorMessage.ADD_REQUEST_WORDS_ERROR);
         }
         sendResponse.fail(req, res, ErrorMessage.REGISTER_WORDS_ERROR);
     }
