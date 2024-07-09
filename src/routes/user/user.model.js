@@ -3,7 +3,11 @@ const bcrypt = require('bcrypt');
 
 const requestSchema = new mongoose.Schema(
     {
-        word: { type: String, required: true },
+        word: { 
+            type: String, 
+            required: true,
+            match: /^[a-zA-Z0-9\s!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
+        },
         awkPron: { type: String },
         comPron: 
             {
