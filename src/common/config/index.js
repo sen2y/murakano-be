@@ -31,12 +31,14 @@ switch (process.env.NODE_ENV) {
             httpOnly: false,
             maxAge: 10 * 60 * 1000,
             sameSite: 'Lax',
+            domain: '.murakano.site',
             secure: true,
         };
         conf.cookieInRefreshTokenOptions = {
             httpOnly: true,
             maxAge: 12 * 60 * 60 * 1000,
             sameSite: 'Lax',
+            domain: '.murakano.site',
             secure: true,
         };
         conf.envMode = 'prod';
