@@ -186,7 +186,7 @@ exports.getProfile = (req, res) => {
 };
 
 exports.logout = (_, res) => {
-    res.clearCookie('refreshToken', config.cookieInRefreshTokenOptions);
+    res.clearCookie('refreshToken', config.cookieInRefreshTokenDeleteOptions);
     return sendResponse.ok(res, {
         message: SuccessMessage.LOGOUT_SUCCESS,
     });
