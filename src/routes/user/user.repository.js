@@ -59,14 +59,14 @@ exports.delRecentSearch = async (_id, searchTerm) => {
 
 exports.updateRecentSearch = async (_id, searchTerm) => {
     try {
-        console.log("id", _id)
-        console.log("searchTerm", searchTerm)
+        console.log('id', _id);
+        console.log('searchTerm', searchTerm);
         const user = await User.findById(_id).exec();
         if (!user) {
             console.log('User not found');
         }
         const recentSearch = user.recentSearches.find((search) => search.searchTerm === searchTerm);
-        console.log("recentSearch", recentSearch)
+        console.log('recentSearch', recentSearch);
         if (recentSearch) {
             // 검색어가 이미 존재하는 경우
             if (recentSearch.deletedAt) {
@@ -94,7 +94,7 @@ exports.postWords = async (userId, formData, nickname, type) => {
             throw new Error('User not found');
         }
 
-        console.log("User before modification:", JSON.stringify(user.requests, null, 2));
+        console.log('User before modification:', JSON.stringify(user.requests, null, 2));
 
         if (type === 'add') {
             user.requests.push({
@@ -105,10 +105,10 @@ exports.postWords = async (userId, formData, nickname, type) => {
                 deletedAt: null,
                 status: 'pend',
                 type: 'add',
-                suggestedBy: nickname // nickname 추가
+                suggestedBy: nickname, // nickname 추가
             });
         } else if (type === 'mod') {
-            const request = user.requests.find(req => req.word === formData.devTerm);
+            const request = user.requests.find((req) => req.word === formData.devTerm);
             if (!request) {
                 user.requests.push({
                     word: formData.devTerm,
@@ -118,8 +118,8 @@ exports.postWords = async (userId, formData, nickname, type) => {
                     deletedAt: null,
                     status: 'pend',
                     type: 'mod',
-                    suggestedBy: nickname // nickname 추가
-                })
+                    suggestedBy: nickname, // nickname 추가
+                });
             } else {
                 console.log('이미 같은 단어 수정 요청이 존재합니다.');
                 throw new Error('Word not found');
@@ -129,8 +129,8 @@ exports.postWords = async (userId, formData, nickname, type) => {
         }
 
         await user.save();
-        console.log("User after modification:", JSON.stringify(user.requests, null, 2));
-        return user.requests.find(req => req.word === formData.devTerm);
+        console.log('User after modification:', JSON.stringify(user.requests, null, 2));
+        return user.requests.find((req) => req.word === formData.devTerm);
     } catch (err) {
         console.error(err);
         throw err;
@@ -138,15 +138,14 @@ exports.postWords = async (userId, formData, nickname, type) => {
 };
 
 exports.getUserRequests = async (userId) => {
-    try { 
+    try {
         const user = await User.findById(userId).select('requests').exec();
         if (!user) {
             throw new Error('User not found');
         }
         // requests 배열에서 deletedAt이 null인 항목만 필터링
-        const activeRequests = user.requests.filter(request => request.deletedAt === null);
+        const activeRequests = user.requests.filter((request) => request.deletedAt === null);
         return activeRequests;
-        
     } catch (err) {
         console.error(err);
     }
@@ -157,8 +156,8 @@ exports.getUserRequestsAll = async () => {
         const users = await User.find({}, { requests: 1, _id: 0 }); // 모든 유저의 requests 필드만 가져옴
         const allRequests = [];
 
-        users.forEach(user => {
-            user.requests.forEach(request => {
+        users.forEach((user) => {
+            user.requests.forEach((request) => {
                 if (request.deletedAt === null) {
                     allRequests.push(request);
                 }
@@ -169,29 +168,29 @@ exports.getUserRequestsAll = async () => {
     } catch (err) {
         console.error(err);
     }
-}
+};
 
 exports.deleteRequest = async (userId, requestWord) => {
     try {
         const user = await User.findById(userId).select('requests').exec();
         if (!user) {
-            console.log("사용자를 찾을 수 없음");
+            console.log('사용자를 찾을 수 없음');
             throw new Error('User not found');
         }
 
-        const request = user.requests.find(req => req.word === requestWord && req.deletedAt === null);
+        const request = user.requests.find((req) => req.word === requestWord && req.deletedAt === null);
         if (request) {
-            console.log("삭제할 요청 찾음:", request);
+            console.log('삭제할 요청 찾음:', request);
             request.deletedAt = Date.now(); // 요청을 삭제로 표시
             await user.save();
 
-            console.log("요청 삭제 성공");
+            console.log('요청 삭제 성공');
         } else {
         }
     } catch (err) {
         console.error(err);
     }
-}
+};
 
 exports.getRole = async (userId) => {
     try {
@@ -200,7 +199,7 @@ exports.getRole = async (userId) => {
     } catch (err) {
         console.error(err);
     }
-}
+};
 
 exports.updateRequest = async (requestId, formData) => {
     try {
@@ -209,7 +208,7 @@ exports.updateRequest = async (requestId, formData) => {
             throw new Error('User not found');
         }
 
-        const request = user.requests.find(req => req._id.toString() === requestId && req.deletedAt === null);
+        const request = user.requests.find((req) => req._id.toString() === requestId && req.deletedAt === null);
         if (request) {
             // formData의 각 속성 값으로 request의 해당 속성 값 업데이트
             if (formData.addInfo !== undefined) {
@@ -236,7 +235,7 @@ exports.updateRequest = async (requestId, formData) => {
 
 exports.updateRequestState = async (userId, requestId, status) => {
     try {
-        console.log("updateRequestState 레포진입!!!!!!!!!!!!", userId, requestId, status)
+        console.log('updateRequestState 레포진입!!!!!!!!!!!!', userId, requestId, status);
         const user = await User.findOneAndUpdate(
             { 'requests._id': requestId },
             { $set: { 'requests.$.status': status } },
@@ -248,7 +247,15 @@ exports.updateRequestState = async (userId, requestId, status) => {
         } else {
             console.log('Request status updated successfully');
         }
-
     } catch (err) {
         console.error(err);
-    }}
+    }
+};
+
+exports.deleteUserById = async (_id) => {
+    try {
+        return await User.findByIdAndDelete(_id);
+    } catch (err) {
+        console.error(err);
+    }
+};
