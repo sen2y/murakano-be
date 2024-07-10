@@ -15,7 +15,7 @@ exports.postApiLimiter = rateLimit({
 
 exports.commonLimiter = rateLimit({
     windowMs: 60 * 1000, // 1분 간격
-    max: 50, // windowMs동안 최대 호출 횟수
+    max: 1000, // windowMs동안 최대 호출 횟수
     handler(req, res) {
         // 제한 초과 시 콜백 함수
         res.status(this.statusCode).json({
