@@ -47,6 +47,8 @@ exports.getAllWords = async (isSorted, page, limit) => {
     try {
         const skip = (page - 1) * limit;
         const sortOrder = {};
+        const collation = { locale: 'en', strength: 2 }; // 대소문자 구분 없이 정렬하기 위한 collation 설정
+
         if (isSorted === 'asc' || isSorted === 'desc') {
             sortOrder.word = isSorted === 'asc' ? 1 : -1;
         } else if (isSorted === 'popularity') {
@@ -55,7 +57,13 @@ exports.getAllWords = async (isSorted, page, limit) => {
             sortOrder.createdAt = -1;
             sortOrder.word = 1; // createdAt이 동일한 경우 단어 오름차순으로 정렬
         }
-        const words = await Word.find().sort(sortOrder).skip(skip).limit(parseInt(limit, 10));
+
+        const words = await Word.find()
+            .collation(collation) // collation을 추가하여 대소문자 구분 없이 정렬
+            .sort(sortOrder)
+            .skip(skip)
+            .limit(parseInt(limit, 10));
+
         return words;
     } catch (error) {
         console.log('Error while getting all words:', error);
@@ -65,8 +73,7 @@ exports.getAllWords = async (isSorted, page, limit) => {
 
 exports.addWord = async (requestId, formData) => {
     try {
-        // requestId에 해당하는 request를 찾습니다.
-        console.log("addWord 진입!!!!!!!!", requestId, formData)
+        // requestId에 해당하는 request를 찾습니다.        
         const user = await User.findOne({ 'requests._id': requestId });
         if (!user) {
             console.log('User with the given request not found');
@@ -78,7 +85,6 @@ exports.addWord = async (requestId, formData) => {
             console.log('Request not found');
             return null;
         }
-
 
         const newWord = new Word({
             word: formData.devTerm,
@@ -100,7 +106,7 @@ exports.addWord = async (requestId, formData) => {
 exports.updateWord = async (requestId, formData) => {
     try {
         // requestId에 해당하는 request를 찾습니다.
-        console.log("updateWord 레포진입!!!!!!!!!!!!", requestId, formData)
+        console.log('updateWord 레포진입!!!!!!!!!!!!', requestId, formData);
         const user = await User.findOne({ 'requests._id': requestId });
         if (!user) {
             console.log('User with the given request not found');
@@ -129,7 +135,6 @@ exports.updateWord = async (requestId, formData) => {
 
         console.log('Word updated successfully');
         return wordToUpdate;
-
     } catch (error) {
         console.log('Error while updating word:', error);
         return null;
