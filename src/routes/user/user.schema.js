@@ -15,6 +15,10 @@ const commonSchemas = {
         maxLength: 20,
         pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};:\'",.<>\\/\\\\?]).+$',
     },
+    word: {
+        type: 'string',
+        pattern: '^[a-zA-Z!@#$%^&*()_+\\-=\\[\\]{};:\'",.<>/?]+$',
+    },
 };
 
 const registerBodySchema = {
@@ -56,4 +60,27 @@ const loginBodySchema = {
     additionalProperties: false,
 };
 
-module.exports = { registerBodySchema, nicknameCheckReqQuerySchema, emailCheckReqQuerySchema, loginBodySchema };
+const requestBodySchema = {
+    type: 'object',
+    properties: {
+        word: commonSchemas.word,
+        type: { type: 'string' },
+        nickname: { type: 'string' },
+        formData: {
+            type: 'object',
+            properties: {
+                devTerm: { type: 'string' },
+                commonPron: { type: 'string' },
+                awkPron: { type: 'string' },
+                addInfo: { type: 'string' }
+            },
+            additionalProperties: false
+        }
+    },
+    required: ['word', 'type', 'nickname', 'formData'],
+    additionalProperties: false,
+};
+
+
+
+module.exports = { registerBodySchema, nicknameCheckReqQuerySchema, emailCheckReqQuerySchema, loginBodySchema, requestBodySchema };
