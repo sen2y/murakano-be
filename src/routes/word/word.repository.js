@@ -140,3 +140,15 @@ exports.updateWord = async (requestId, formData) => {
         return null;
     }
 };
+
+exports.checkDuplicateWord = async (word) => {
+    try {
+        const wordExists = await Word.findOne({ word: { $regex: new RegExp(`^${word}$`, 'i') } });
+        console.log('wordExists:', wordExists);
+        return wordExists;
+    }
+    catch (error) {
+        console.log('Error while checking duplicate word:', error);
+        return null;
+    }
+}

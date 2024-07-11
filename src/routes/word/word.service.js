@@ -23,3 +23,10 @@ exports.getAllWords = async (sort, page, limit) => {
     const words = await wordRepository.getAllWords(sort, page, limit);
     return words;
 };
+
+// 등록 단어 중복 검사
+exports.checkDuplicateWord = async (word) => {
+    const isDuplicate = await wordRepository.checkDuplicateWord(word);
+    console.log("isDuplicate: ", isDuplicate)
+    return isDuplicate;
+};
