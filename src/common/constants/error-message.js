@@ -34,6 +34,8 @@ const ErrorMessage = Object.freeze({
     RANK_WORDS_ERROR: '인기 검색어 조회 중 오류가 발생하였습니다.',
     RELATED_WORDS_ERROR: '연관 검색어 조회 중 오류가 발생하였습니다.',
     REGISTER_WORDS_ERROR: '등록 요청 중 오류가 발생하였습니다.',
+    EXIST_WORD: '이미 존재하는 단어입니다.',
+    CHECK_DUPLICATE_WORD_ERROR: '단어 중복검사중 오류가 발생하였습니다.',
 
     // REQUEST
     GET_REQUESTS_ERROR: '요청 조회중 오류가 발생하였습니다.',
