@@ -27,3 +27,10 @@ exports.getAllWords = async (sort, page, limit) => {
 exports.deleteWordContributor = async (_id) => {
     return await wordRepository.deleteWordContributor(_id);
 };
+
+// 등록 단어 중복 검사
+exports.checkDuplicateWord = async (word) => {
+    const isDuplicate = await wordRepository.checkDuplicateWord(word);
+    console.log('isDuplicate: ', isDuplicate);
+    return isDuplicate;
+};

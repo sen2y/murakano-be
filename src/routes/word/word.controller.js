@@ -87,3 +87,31 @@ exports.getAllWords = async (req, res) => {
         sendResponse.fail(req, res, ErrorMessage.GET_WORDS_ERROR);
     }
 };
+
+// 등록요청 중복 단어 검사
+exports.checkDuplicateWord = async (req, res) => {
+    try {
+        const { word } = req.body; // req.body 에서 word 추출
+        console.log("전달된 중복 검수 단어", );
+        const isDataExist = await wordService.checkDuplicateWord(word);
+        data = { isDataExist };
+        console.log("중복검수 결과", data);
+
+        // 중복 단어가 있는 경우 
+        if (isDataExist) {
+            return sendResponse.ok(res, {
+                message: ErrorMessage.EXIST_WORD,
+                data,
+            });
+        }
+        // 중복 단어가 없는 경우
+        return sendResponse.ok(res, {
+            message: SuccessMessage.CHECK_DUPLICATE_REQUEST_SUCCESS,
+            data,
+        });
+
+    } catch (error) {
+        sendResponse.fail(req, res, ErrorMessage.CHECK_DUPLICATE_REQUEST_ERROR);
+    }
+}
+
