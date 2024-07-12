@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../../common/config');
 
 const userService = require('./user.service');
+const wordService = require('../word/word.service');
 const sendResponse = require('../../common/utils/response-handler');
 const ErrorMessage = require('../../common/constants/error-message');
 const SuccessMessage = require('../../common/constants/success-message');
@@ -319,6 +320,7 @@ exports.updateRequestState = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     try {
         const { _id } = req.user;
+        await wordService.deleteWordContributor(_id);
         await userService.deleteUser(_id);
         sendResponse.ok(res, {
             message: SuccessMessage.DELETE_USER_SUCCESS,

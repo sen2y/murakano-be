@@ -23,3 +23,7 @@ exports.getAllWords = async (sort, page, limit) => {
     const words = await wordRepository.getAllWords(sort, page, limit);
     return words;
 };
+
+exports.deleteWordContributor = async (_id) => {
+    return await wordRepository.deleteWordContributor(_id);
+};
