@@ -45,6 +45,16 @@ exports.updateRecentSearch = async (userID, searchTerm) => {
     }
 };
 
+// 단어 추가 및 수정
+exports.postWords = async (userId, formData, nickname, type) => {
+    try {
+        const word = await userRepository.postWords(userId, formData, nickname, type);
+        return word;
+    } catch (error) {
+        console.error('Error in userService.postWords:', error.message);
+        throw new Error('Error processing word: ' + error.message);
+    }
+};
 exports.getUserRequests = async (userId) => {
     const requests = await userRepository.getUserRequests(userId);
     return requests;
@@ -65,16 +75,28 @@ exports.getRole = async (userId) => {
     return role;
 };
 
-exports.updateRequest = async (userId, requestWord, formData) => {
-    if(userId) {
-        await userRepository.updateRequest(userId, requestWord, formData);
+exports.updateRequest = async (requestId, formData) => {
+    if (requestId) {
+        await userRepository.updateRequest(requestId, formData);
     }
 };
 
-exports.updateRequestState = async (userId, requestId, status) => {
-    if(userId) {
-        await userRepository.updateRequestState(userId, requestId, status);
-        await wordRepository.addWord(requestId);
+exports.updateRequestState = async (userId, requestId, status, formData, requestType) => {
+    if (userId) {
+        await userRepository.updateRequestState(userId, requestId, status, formData);
+        if (requestType === 'add') {
+            await wordRepository.addWord(requestId, formData);
+            await userRepository.updateRequest(requestId, formData); //수정값 사용자 요청 업데이트
+        } else if (requestType === 'mod') {
+            await wordRepository.updateWord(requestId, formData);
+            await userRepository.updateRequest(requestId, formData); //수정값 사용자 요청 업데이트
+        } else {
+            console.log('requestType 오류');
+            return;
+        }
     }
-    //promise.all 사용 
+};
+
+exports.deleteUser = async (_id) => {
+    return await userRepository.deleteUserById(_id);
 };

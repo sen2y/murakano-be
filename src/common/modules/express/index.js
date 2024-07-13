@@ -10,6 +10,7 @@ const cookieParser = require('cookie-parser');
 const conf = require('../../config');
 const passportConfig = require('../../passport');
 const router = require('../../../routes/index');
+const { commonLimiter } = require('../../utils/rateLimit');
 
 module.exports = expressLoader = (app) => {
     passportConfig();
@@ -76,6 +77,7 @@ module.exports = expressLoader = (app) => {
     app.use(cookieParser());
 
     // Router 설정
+    app.use(commonLimiter);
     app.use(router);
 
     app.all('*', (req, res) => {

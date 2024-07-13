@@ -4,6 +4,7 @@ const config = require('../../common/config');
 const redisClient = require('../../common/modules/redis');
 
 const userService = require('./user.service');
+const wordService = require('../word/word.service');
 const sendResponse = require('../../common/utils/response-handler');
 const ErrorMessage = require('../../common/constants/error-message');
 const SuccessMessage = require('../../common/constants/success-message');
@@ -13,6 +14,7 @@ const {
     registerBodySchema,
     emailCheckReqQuerySchema,
     loginBodySchema,
+    requestBodySchema,
 } = require('./user.schema');
 const { generateAccessToken, generateRefreshToken } = require('../../common/utils/auth');
 const { getKakaoToken, getUserInfo } = require('../../common/utils/kakao');
@@ -224,7 +226,7 @@ exports.logout = async (req, res) => {
         }
     }
 
-    res.clearCookie('refreshToken');
+    res.clearCookie('refreshToken',config.cookieInRefreshTokenDeleteOptions);
     return sendResponse.ok(res, {
         message: SuccessMessage.LOGOUT_SUCCESS,
     });
@@ -255,6 +257,27 @@ exports.delRecentSearch = async (req, res) => {
     } catch (err) {
         console.log(err);
         sendResponse.fail(req, res, ErrorMessage.DELETE_RECENT_WORD_ERROR);
+    }
+};
+
+// 새로운 단어 등록 및 수정
+exports.postWords = async (req, res) => {
+    try {
+        const validData = validateRequest(requestBodySchema, req.body);
+        const { _id } = req.user;
+        const { nickname } = req.params;
+        const { formData, type } = req.body;
+        const result = await userService.postWords(_id, formData, nickname, type);
+        sendResponse.ok(res, {
+            message: SuccessMessage.REGISTER_WORDS_SUCCESS,
+            data: result,
+        });
+    } catch (error) {
+        console.log('Error during postWords:', error);
+        if (error?.type === 'ajv') {
+            return sendResponse.badRequest(res, ErrorMessage.ADD_REQUEST_WORDS_ERROR);
+        }
+        sendResponse.fail(req, res, ErrorMessage.REGISTER_WORDS_ERROR);
     }
 };
 
@@ -309,10 +332,9 @@ exports.getRole = async (req, res) => {
 };
 
 exports.updateRequest = async (req, res) => {
-    const { _id } = req.user;
-    const { word } = req.params;
+    const { requestId } = req.params;
     const { formData } = req.body;
-    await userService.updateRequest(_id, word, formData);
+    await userService.updateRequest(requestId, formData);
     sendResponse.ok(res, {
         message: SuccessMessage.UPDATE_REQUEST_SUCCESS,
     });
@@ -322,11 +344,15 @@ exports.updateRequestState = async (req, res) => {
     try {
         const { _id } = req.user;
         const { requestId } = req.params;
-        const { status } = req.body;
+        const { status, formData, requestType } = req.body;
 
+<<<<<<< HEAD
         console.log('요청업데이트컨트롤러 진입!!!!', _id, requestId, status);
 
         await userService.updateRequestState(_id, requestId, status);
+=======
+        await userService.updateRequestState(_id, requestId, status, formData, requestType);
+>>>>>>> dev
         sendResponse.ok(res, {
             message: SuccessMessage.UPDATE_REQUEST_STATE_SUCCESS,
         });
@@ -335,3 +361,20 @@ exports.updateRequestState = async (req, res) => {
         sendResponse.fail(req, res, ErrorMessage.UPDATE_REQUEST_STATE_ERROR);
     }
 };
+<<<<<<< HEAD
+=======
+
+exports.deleteUser = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        await wordService.deleteWordContributor(_id);
+        await userService.deleteUser(_id);
+        sendResponse.ok(res, {
+            message: SuccessMessage.DELETE_USER_SUCCESS,
+        });
+    } catch (err) {
+        console.log(err);
+        sendResponse.fail(req, res, ErrorMessage.DELETE_USER_ERROR);
+    }
+};
+>>>>>>> dev

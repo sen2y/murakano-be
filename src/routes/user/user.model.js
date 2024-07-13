@@ -3,16 +3,20 @@ const bcrypt = require('bcrypt');
 
 const requestSchema = new mongoose.Schema(
     {
-        word: { type: String, required: true },
-        awkPron: [{ type: String }],
-        comPron: [
+        word: { 
+            type: String, 
+            required: true,
+            match: /^[a-zA-Z0-9\s!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/
+        },
+        awkPron: { type: String },
+        comPron: 
             {
                 type: String,
                 required: function () {
                     return this.type === 'mod';
                 },
             },
-        ],
+        
         info: { type: String },
         suggestedBy: { type: String, required: true },
         type: { type: String, enum: ['add', 'mod'], required: true },

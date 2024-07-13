@@ -24,19 +24,26 @@ const ErrorMessage = Object.freeze({
     LOGIN_ERROR: '로그인중 오류가 발생하였습니다.',
     KAKAO_LOGIN_ERROR: '카카오 로그인중 오류가 발생하였습니다.',
     NO_REFRESH_TOKEN: '비로그인 상태입니다.',
-    REFRESH_TOKEN_ERROR: 'Refresh Token 검증중 오류가 발생하였습니다.',
     REFRESH_TOKEN_MISMATCH: '유효하지 않은 Refresh Token입니다.',
+    REFRESH_TOKEN_ERROR: 'refresh token 검증중 오류가 발생하였습니다.',
+    DELETE_USER_ERROR: '회원탈퇴중 오류가 발생하였습니다.',
 
     // WORD
     RECENT_WORDS_ERROR: '최근 검색어 조회중 오류가 발생하였습니다.',
     DELETE_RECENT_WORD_ERROR: '최근 검색어 삭제중 오류가 발생하였습니다.',
     SEARCH_WORDS_ERROR: '검색 결과 조회 중 오류가 발생하였습니다.',
+    GET_WORDS_ERROR: '단어 조회 중 오류가 발생하였습니다.',
     RANK_WORDS_ERROR: '인기 검색어 조회 중 오류가 발생하였습니다.',
+    RELATED_WORDS_ERROR: '연관 검색어 조회 중 오류가 발생하였습니다.',
+    REGISTER_WORDS_ERROR: '등록 요청 중 오류가 발생하였습니다.',
+    EXIST_WORD: '이미 존재하는 단어입니다.',
+    CHECK_DUPLICATE_WORD_ERROR: '단어 중복검사중 오류가 발생하였습니다.',
 
     // REQUEST
     GET_REQUESTS_ERROR: '요청 조회중 오류가 발생하였습니다.',
     DELETE_REQUEST_ERROR: '요청 삭제중 오류가 발생하였습니다.',
     UPDATE_REQUEST_STATE_ERROR: '요청 상태 변경중 오류가 발생하였습니다.',
+    ADD_REQUEST_WORDS_ERROR: '단어는 영어와 기호만 입력할 수 있습니다.',
 });
 
 module.exports = ErrorMessage;
