@@ -73,7 +73,7 @@ exports.getAllWords = async (isSorted, page, limit) => {
 
 exports.addWord = async (requestId, formData) => {
     try {
-        // requestId에 해당하는 request를 찾습니다.        
+        // requestId에 해당하는 request를 찾습니다.
         const user = await User.findOne({ 'requests._id': requestId });
         if (!user) {
             console.log('User with the given request not found');
@@ -137,6 +137,35 @@ exports.updateWord = async (requestId, formData) => {
         return wordToUpdate;
     } catch (error) {
         console.log('Error while updating word:', error);
+        return null;
+    }
+};
+
+exports.deleteWordContributor = async (_id) => {
+    // _id가 일치하는 유저의 닉네임 값을 가져오고, 해당 유저가 suggestedBy로 있는 모든 단어의 suggestedBy를 null로 변경
+    try {
+        const user = await User.findById(_id);
+
+        if (!user) {
+            console.log('User not found');
+            return null;
+        }
+        const nickname = user.nickname;
+
+        const words = await Word.updateMany({ suggestedBy: nickname }, { suggestedBy: null });
+        return words;
+    } catch (error) {
+        console.log('Error while deleting word contributor:', error);
+        return null;
+    }
+};
+exports.checkDuplicateWord = async (word) => {
+    try {
+        const wordExists = await Word.findOne({ word: { $regex: new RegExp(`^${word}$`, 'i') } });
+        console.log('wordExists:', wordExists);
+        return wordExists;
+    } catch (error) {
+        console.log('Error while checking duplicate word:', error);
         return null;
     }
 };
