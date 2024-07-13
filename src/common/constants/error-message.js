@@ -23,7 +23,8 @@ const ErrorMessage = Object.freeze({
     EXIST_EMAIL: '이미 존재하는 이메일 입니다.',
     LOGIN_ERROR: '로그인중 오류가 발생하였습니다.',
     KAKAO_LOGIN_ERROR: '카카오 로그인중 오류가 발생하였습니다.',
-    NO_REFRESH_TOKEN: 'refresh token이 존재하지 않습니다.',
+    NO_REFRESH_TOKEN: '비로그인 상태입니다.',
+    REFRESH_TOKEN_MISMATCH: '유효하지 않은 Refresh Token입니다.',
     REFRESH_TOKEN_ERROR: 'refresh token 검증중 오류가 발생하였습니다.',
     DELETE_USER_ERROR: '회원탈퇴중 오류가 발생하였습니다.',
 

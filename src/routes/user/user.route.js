@@ -33,7 +33,7 @@ userRouter.get('/check/email', isEmailExist);
 userRouter.post('/local/login', isNotLoggedIn, localLogin);
 userRouter.post('/kakao/login', isNotLoggedIn, kakaoLogin);
 userRouter.post('/refresh', refreshToken);
-userRouter.post('/logout', logout);
+userRouter.post('/logout', isLoggedIn, logout);
 
 userRouter.get('/profile', isLoggedIn, getProfile);
 
