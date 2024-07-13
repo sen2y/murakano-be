@@ -23,6 +23,11 @@ const conf = {
 
     // social login
     kakaoRestApiKey: process.env.KAKAO_REST_API_KEY,
+
+    redisHost: process.env.REDIS_HOST,
+    redisPort: process.env.REDIS_PORT,
+    redisUsername: process.env.REDIS_USERNAME,
+    redisPassword: process.env.REDIS_PASSWORD,
 };
 
 switch (process.env.NODE_ENV) {
