@@ -226,7 +226,7 @@ exports.logout = async (req, res) => {
         }
     }
 
-    res.clearCookie('refreshToken',config.cookieInRefreshTokenDeleteOptions);
+    res.clearCookie('refreshToken', config.cookieInRefreshTokenDeleteOptions);
     return sendResponse.ok(res, {
         message: SuccessMessage.LOGOUT_SUCCESS,
     });
@@ -346,13 +346,7 @@ exports.updateRequestState = async (req, res) => {
         const { requestId } = req.params;
         const { status, formData, requestType } = req.body;
 
-<<<<<<< HEAD
-        console.log('요청업데이트컨트롤러 진입!!!!', _id, requestId, status);
-
-        await userService.updateRequestState(_id, requestId, status);
-=======
         await userService.updateRequestState(_id, requestId, status, formData, requestType);
->>>>>>> dev
         sendResponse.ok(res, {
             message: SuccessMessage.UPDATE_REQUEST_STATE_SUCCESS,
         });
@@ -361,8 +355,6 @@ exports.updateRequestState = async (req, res) => {
         sendResponse.fail(req, res, ErrorMessage.UPDATE_REQUEST_STATE_ERROR);
     }
 };
-<<<<<<< HEAD
-=======
 
 exports.deleteUser = async (req, res) => {
     try {
@@ -377,4 +369,3 @@ exports.deleteUser = async (req, res) => {
         sendResponse.fail(req, res, ErrorMessage.DELETE_USER_ERROR);
     }
 };
->>>>>>> dev
