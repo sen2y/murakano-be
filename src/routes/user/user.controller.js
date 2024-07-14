@@ -103,7 +103,7 @@ exports.localLogin = async (req, res, next) => {
             const accessToken = generateAccessToken(user);
             const refreshToken = generateRefreshToken(user);
 
-            await redisClient.set(user.email, refreshToken);
+            await redisClient.set(user.email, refreshToken, 'EX', 60 * 60 * 12);
 
             res.cookie('refreshToken', refreshToken, config.cookieInRefreshTokenOptions);
 
@@ -137,9 +137,8 @@ exports.kakaoLogin = async (req, res) => {
 
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
-        console.log(user.email);
-        const re = await redisClient.set(user.email, refreshToken);
-        console.log('hh', re);
+
+        await redisClient.set(user.email, refreshToken, 'EX', 60 * 60 * 12);
         res.cookie('refreshToken', refreshToken, config.cookieInRefreshTokenOptions);
 
         sendResponse.ok(res, {
@@ -172,6 +171,9 @@ exports.refreshToken = async (req, res) => {
             const storedRefreshToken = await redisClient.get(user.email);
 
             if (storedRefreshToken !== refreshToken) {
+                console.error('Refresh token mismatch');
+                await redisClient.del(user.email);
+                res.clearCookie('refreshToken', config.cookieInRefreshTokenDeleteOptions);
                 return sendResponse.unAuthorized(res, {
                     message: ErrorMessage.REFRESH_TOKEN_MISMATCH,
                 });
@@ -188,7 +190,7 @@ exports.refreshToken = async (req, res) => {
                 email: user.email,
             });
 
-            await redisClient.set(user.email, newRefreshToken);
+            await redisClient.set(user.email, newRefreshToken, 'EX', 60 * 60 * 12);
             res.cookie('refreshToken', newRefreshToken, config.cookieInRefreshTokenOptions);
 
             sendResponse.ok(res, {
