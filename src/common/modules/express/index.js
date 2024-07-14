@@ -24,6 +24,12 @@ module.exports = expressLoader = (app) => {
         next();
     });
 
+    // Content Security Policy 설정, 위 난수 활용
+    app.use((req, res, next) => {
+        res.setHeader('Content-Security-Policy', `script-src 'self' 'nonce-${res.locals.nonce}';`);
+        next();
+    });
+
     // CORS 설정
     app.use((req, res, next) => {
         cors({
