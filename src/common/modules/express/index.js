@@ -24,14 +24,28 @@ module.exports = expressLoader = (app) => {
         next();
     });
 
+    // Content Security Policy 설정, 위 난수 활용
+    app.use((req, res, next) => {
+        res.setHeader('Content-Security-Policy', `script-src 'self' 'nonce-${res.locals.nonce}';`);
+        next();
+    });
+
     // CORS 설정
     app.use((req, res, next) => {
         cors({
             credentials: true,
             origin: (origin, callback) => {
-                if (origin === undefined || (origin && conf.corsWhiteList?.indexOf(origin) !== -1)) {
+                if (
+                    // whitelist에 있는 origin 허용
+                    (origin && conf.corsWhiteList.indexOf(origin) !== -1) ||
+                    // postman 허용
+                    (!origin &&
+                        conf.corsUserAgent.split(',').some((agent) => req.headers['user-agent'].includes(agent)))
+                ) {
                     return callback(null, true);
                 }
+
+                console.error(`Blocked CORS request from: ${origin}`);
                 callback(new Error('CORS ERROR'));
             },
         })(req, res, next);
