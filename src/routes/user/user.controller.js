@@ -136,8 +136,9 @@ exports.kakaoLogin = async (req, res) => {
         }
 
         const accessToken = generateAccessToken(user);
-        const re = await redisClient.set(user.email, refreshToken, 'EX', 60 * 60 * 12);
-        console.log('hh', re);
+        const refreshToken = generateRefreshToken(user);
+
+        await redisClient.set(user.email, refreshToken, 'EX', 60 * 60 * 12);
         res.cookie('refreshToken', refreshToken, config.cookieInRefreshTokenOptions);
 
         sendResponse.ok(res, {
