@@ -29,9 +29,17 @@ module.exports = expressLoader = (app) => {
         cors({
             credentials: true,
             origin: (origin, callback) => {
-                if (origin === undefined || (origin && conf.corsWhiteList?.indexOf(origin) !== -1)) {
+                if (
+                    // whitelist에 있는 origin 허용
+                    (origin && conf.corsWhiteList.indexOf(origin) !== -1) ||
+                    // postman 허용
+                    (!origin &&
+                        conf.corsUserAgent.split(',').some((agent) => req.headers['user-agent'].includes(agent)))
+                ) {
                     return callback(null, true);
                 }
+
+                console.error(`Blocked CORS request from: ${origin}`);
                 callback(new Error('CORS ERROR'));
             },
         })(req, res, next);
