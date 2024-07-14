@@ -12,6 +12,7 @@ const conf = {
     // server
     port: process.env.PORT,
     corsWhiteList: process.env.CORS_WHITELIST,
+    corsUserAgent: process.env.CORS_USERAGENT,
 
     // database
     mongoURL: process.env.MONGO_URL,
