@@ -34,6 +34,9 @@ const SuccessMessage = Object.freeze({
 
     // Word - 등록요청
     REGISTER_WORDS_SUCCESS: '등록 요청 성공',
+
+    // Word - 중복검사
+    CHECK_DUPLICATE_REQUEST_SUCCESS: '중복 검사 성공',
 });
 
 module.exports = SuccessMessage;
