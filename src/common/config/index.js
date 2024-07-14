@@ -23,6 +23,11 @@ const conf = {
 
     // social login
     kakaoRestApiKey: process.env.KAKAO_REST_API_KEY,
+
+    redisHost: process.env.REDIS_HOST,
+    redisPort: process.env.REDIS_PORT,
+    redisUsername: process.env.REDIS_USERNAME,
+    redisPassword: process.env.REDIS_PASSWORD,
 };
 
 switch (process.env.NODE_ENV) {
@@ -41,6 +46,13 @@ switch (process.env.NODE_ENV) {
             domain: '.murakano.site',
             secure: true,
         };
+        conf.cookieInRefreshTokenDeleteOptions = {
+            httpOnly: true,
+            maxAge: 0,
+            sameSite: 'Lax',
+            domain: '.murakano.site',
+            secure: true,
+        };
         conf.envMode = 'prod';
         break;
     case 'development':
@@ -54,7 +66,11 @@ switch (process.env.NODE_ENV) {
             maxAge: 12 * 60 * 60 * 1000,
             sameSite: 'Lax',
         };
-        1;
+        conf.cookieInRefreshTokenDeleteOptions = {
+            httpOnly: true,
+            maxAge: 0,
+            sameSite: 'Lax',
+        };
         conf.envMode = 'dev';
         break;
     default:

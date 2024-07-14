@@ -23,8 +23,10 @@ const ErrorMessage = Object.freeze({
     EXIST_EMAIL: '이미 존재하는 이메일 입니다.',
     LOGIN_ERROR: '로그인중 오류가 발생하였습니다.',
     KAKAO_LOGIN_ERROR: '카카오 로그인중 오류가 발생하였습니다.',
-    NO_REFRESH_TOKEN: 'refresh token이 존재하지 않습니다.',
+    NO_REFRESH_TOKEN: '비로그인 상태입니다.',
+    REFRESH_TOKEN_MISMATCH: '유효하지 않은 Refresh Token입니다.',
     REFRESH_TOKEN_ERROR: 'refresh token 검증중 오류가 발생하였습니다.',
+    DELETE_USER_ERROR: '회원탈퇴중 오류가 발생하였습니다.',
 
     // WORD
     RECENT_WORDS_ERROR: '최근 검색어 조회중 오류가 발생하였습니다.',
@@ -41,6 +43,7 @@ const ErrorMessage = Object.freeze({
     GET_REQUESTS_ERROR: '요청 조회중 오류가 발생하였습니다.',
     DELETE_REQUEST_ERROR: '요청 삭제중 오류가 발생하였습니다.',
     UPDATE_REQUEST_STATE_ERROR: '요청 상태 변경중 오류가 발생하였습니다.',
+    ADD_REQUEST_WORDS_ERROR: '단어는 영어와 기호만 입력할 수 있습니다.',
 });
 
 module.exports = ErrorMessage;

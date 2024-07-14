@@ -76,7 +76,7 @@ exports.getRole = async (userId) => {
 };
 
 exports.updateRequest = async (requestId, formData) => {
-    if(requestId) {
+    if (requestId) {
         await userRepository.updateRequest(requestId, formData);
     }
 };
@@ -91,8 +91,12 @@ exports.updateRequestState = async (userId, requestId, status, formData, request
             await wordRepository.updateWord(requestId, formData);
             await userRepository.updateRequest(requestId, formData); //수정값 사용자 요청 업데이트
         } else {
-            console.log("requestType 오류")
+            console.log('requestType 오류');
             return;
         }
     }
+};
+
+exports.deleteUser = async (_id) => {
+    return await userRepository.deleteUserById(_id);
 };

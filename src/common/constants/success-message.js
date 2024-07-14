@@ -8,8 +8,8 @@ const SuccessMessage = Object.freeze({
     LOGIN_SUCCESSS: '로그인 성공',
     LOGOUT_SUCCESS: '로그아웃 성공',
 
+    DELETE_USER_SUCCESS: '회원 탈퇴 성공',
     REFRESH_TOKEN: 'access token 발급 성공',
-
     GET_PROFILE_SUCCESS: '유저 정보 조회 성공',
 
     // WORD - 최근검색어
