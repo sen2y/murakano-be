@@ -279,7 +279,7 @@ exports.postWords = async (req, res) => {
         if (error?.type === 'ajv') {
             return sendResponse.badRequest(res, ErrorMessage.ADD_REQUEST_WORDS_ERROR);
         }
-        sendResponse.fail(req, res, ErrorMessage.REGISTER_WORDS_ERROR);
+        sendResponse.fail(req, res, ErrorMessage.REQUEST_DUPLICATE_ERROR);;
     }
 };
 
