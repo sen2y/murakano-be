@@ -17,7 +17,7 @@ const commonSchemas = {
     },
     word: {
         type: 'string',
-        pattern: '^[a-zA-Z!@#$%^&*()_+\\-=\\[\\]{};:\'",.<>/?]+$',
+        pattern: '^[\\s\\S]*$',
     },
 };
 
@@ -72,15 +72,19 @@ const requestBodySchema = {
                 devTerm: { type: 'string' },
                 commonPron: { type: 'string' },
                 awkPron: { type: 'string' },
-                addInfo: { type: 'string' }
+                addInfo: { type: 'string' },
             },
-            additionalProperties: false
-        }
+            additionalProperties: false,
+        },
     },
     required: ['word', 'type', 'nickname', 'formData'],
     additionalProperties: false,
 };
 
-
-
-module.exports = { registerBodySchema, nicknameCheckReqQuerySchema, emailCheckReqQuerySchema, loginBodySchema, requestBodySchema };
+module.exports = {
+    registerBodySchema,
+    nicknameCheckReqQuerySchema,
+    emailCheckReqQuerySchema,
+    loginBodySchema,
+    requestBodySchema,
+};

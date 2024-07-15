@@ -1,6 +1,4 @@
 const User = require('./user.model');
-const mongoose = require('mongoose');
-const { ObjectId } = mongoose.Types;
 
 exports.createUser = async (userData) => {
     try {
@@ -93,9 +91,6 @@ exports.postWords = async (userId, formData, nickname, type) => {
         if (!user) {
             throw new Error('User not found');
         }
-
-        console.log('User before modification:', JSON.stringify(user.requests, null, 2));
-
         if (type === 'add') {
             user.requests.push({
                 word: formData.devTerm,
@@ -108,8 +103,9 @@ exports.postWords = async (userId, formData, nickname, type) => {
                 suggestedBy: nickname, // nickname 추가
             });
         } else if (type === 'mod') {
-            const request = user.requests.find((req) => req.word === formData.devTerm);
-            if (!request) {
+            const requestExists = user.requests.some((req) => req.word === formData.devTerm);
+
+            if (!requestExists) {
                 user.requests.push({
                     word: formData.devTerm,
                     info: formData.addInfo,
@@ -121,22 +117,18 @@ exports.postWords = async (userId, formData, nickname, type) => {
                     suggestedBy: nickname, // nickname 추가
                 });
             } else {
-                console.log('이미 같은 단어 수정 요청이 존재합니다.');
-                throw new Error('Word not found');
+                throw new Error('이미 같은 단어 수정 요청이 존재합니다.');
             }
         } else {
             throw new Error('Invalid type');
         }
 
         await user.save();
-        console.log('User after modification:', JSON.stringify(user.requests, null, 2));
         return user.requests.find((req) => req.word === formData.devTerm);
     } catch (err) {
-        console.error(err);
         throw err;
     }
 };
-
 exports.getUserRequests = async (userId) => {
     try {
         const user = await User.findById(userId).select('requests').exec();
