@@ -53,6 +53,7 @@ exports.getAllWords = async (isSorted, page, limit) => {
             sortOrder.word = isSorted === 'asc' ? 1 : -1;
         } else if (isSorted === 'popularity') {
             sortOrder.freq = -1;
+            sortOrder.word = 1; // freq가 동일한 경우 word 오름차��으로 정��
         } else if (isSorted === 'recent') {
             sortOrder.createdAt = -1;
             sortOrder.word = 1; // createdAt이 동일한 경우 단어 오름차순으로 정렬
