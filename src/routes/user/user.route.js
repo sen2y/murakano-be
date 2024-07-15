@@ -44,7 +44,6 @@ userRouter.delete('/:searchTerm', isLoggedIn, delRecentSearch); // 최근 검색
 //등록 요청
 userRouter.post('/requests/:nickname/new', isLoggedIn, postWords);
 
-module.exports = userRouter;
 // 요청 조회
 userRouter.get('/requests', isLoggedIn, UserRequests); // 요청 목록 조회
 userRouter.get('/requests/all', isLoggedIn, UserRequestsAll); // 모든 요청 목록 조회
