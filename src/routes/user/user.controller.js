@@ -267,8 +267,8 @@ exports.postWords = async (req, res) => {
     try {
         const validData = validateRequest(requestBodySchema, req.body);
         const { _id } = req.user;
-        const { nickname } = req.params;
-        const { formData, type } = req.body;
+        const { formData, type, nickname } = validData;
+        console.log(formData);
         const result = await userService.postWords(_id, formData, nickname, type);
         sendResponse.ok(res, {
             message: SuccessMessage.REGISTER_WORDS_SUCCESS,
