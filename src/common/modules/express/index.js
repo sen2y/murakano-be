@@ -11,6 +11,7 @@ const conf = require('../../config');
 const passportConfig = require('../../passport');
 const router = require('../../../routes/index');
 const { commonLimiter } = require('../../utils/rateLimit');
+const { swaggerUi, specs } = require('../../../swagger/swagger');
 
 module.exports = expressLoader = (app) => {
     passportConfig();
@@ -97,6 +98,7 @@ module.exports = expressLoader = (app) => {
     // Router 설정
     app.use(commonLimiter);
     app.use(router);
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
 
     app.all('*', (req, res) => {
         res.status(404).json(`Can't find ${req.originalUrl} on this server`);
