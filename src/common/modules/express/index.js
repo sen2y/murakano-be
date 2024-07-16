@@ -11,6 +11,7 @@ const conf = require('../../config');
 const passportConfig = require('../../passport');
 const router = require('../../../routes/index');
 const { commonLimiter } = require('../../utils/rateLimit');
+const { swaggerUi, specs } = require('../../../swagger/swagger');
 
 module.exports = expressLoader = (app) => {
     passportConfig();
@@ -37,10 +38,14 @@ module.exports = expressLoader = (app) => {
             origin: (origin, callback) => {
                 if (
                     // whitelist에 있는 origin 허용
-                    (origin && conf.corsWhiteList.indexOf(origin) !== -1) ||
-                    // postman 허용
-                    (!origin &&
-                        conf.corsUserAgent.split(',').some((agent) => req.headers['user-agent'].includes(agent)))
+                    origin === undefined ||
+                    conf.corsWhiteList.indexOf(origin) !== -1
+                    // NOTE : EB Health Check도 origin undefind라 거부 당해서 임시 주석처리
+                    // // whitelist에 있는 origin 허용
+                    // (origin && conf.corsWhiteList.indexOf(origin) !== -1) ||
+                    // // postman 허용
+                    // (!origin &&
+                    //     conf.corsUserAgent.split(',').some((agent) => req.headers['user-agent'].includes(agent)))
                 ) {
                     return callback(null, true);
                 }
@@ -93,6 +98,7 @@ module.exports = expressLoader = (app) => {
     // Router 설정
     app.use(commonLimiter);
     app.use(router);
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
 
     app.all('*', (req, res) => {
         res.status(404).json(`Can't find ${req.originalUrl} on this server`);

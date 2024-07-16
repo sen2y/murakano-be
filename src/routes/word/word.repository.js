@@ -10,7 +10,6 @@ exports.getSearchWords = async (searchTerm) => {
         if (!searchWords) {
             console.log('Search term not found in Word collection');
         }
-        console.log(888, searchWords);
         return searchWords;
     } catch (error) {
         console.log('Error while getting search words:', error);
@@ -31,7 +30,8 @@ exports.getRankWords = async () => {
 
 exports.getRelatedWords = async (searchTerm, limit) => {
     try {
-        const relatedWords = await Word.find({ word: new RegExp(searchTerm, 'i') })
+        const escapedTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const relatedWords = await Word.find({ word: new RegExp(escapedTerm, 'i') })
             .sort({ freq: -1 })
             .limit(parseInt(limit));
         const wordNames = relatedWords.map((word) => word.word);
@@ -53,6 +53,7 @@ exports.getAllWords = async (isSorted, page, limit) => {
             sortOrder.word = isSorted === 'asc' ? 1 : -1;
         } else if (isSorted === 'popularity') {
             sortOrder.freq = -1;
+            sortOrder.word = 1; // freq가 동일한 경우 word 오름차��으로 정��
         } else if (isSorted === 'recent') {
             sortOrder.createdAt = -1;
             sortOrder.word = 1; // createdAt이 동일한 경우 단어 오름차순으로 정렬
@@ -161,7 +162,8 @@ exports.deleteWordContributor = async (_id) => {
 };
 exports.checkDuplicateWord = async (word) => {
     try {
-        const wordExists = await Word.findOne({ word: { $regex: new RegExp(`^${word}$`, 'i') } });
+        const escapedTerm = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const wordExists = await Word.findOne({ word: { $regex: new RegExp(`^${escapedTerm}$`, 'i') } });
         console.log('wordExists:', wordExists);
         return wordExists;
     } catch (error) {

@@ -1,9 +1,12 @@
 const relatedTermSchema = {
-    type: 'string',
+    type: 'object',
     properties: {
         searchTerm: {
             type: 'string',
             maxLength: 50,
+        },
+        limit: {
+            type: 'string',
         },
     },
     required: ['searchTerm'],
