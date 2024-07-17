@@ -49,14 +49,14 @@ exports.getRankWords = async (req, res) => {
 // 연관검색어 : 쿼리스트링으로 전달받은 검색어 searchTerm을 포함하는 단어 조회
 exports.getRelatedWords = async (req, res) => {
     try {
-        let { searchTerm, limit } = req.query;
-        searchTerm = validateRequest(relatedTermSchema, searchTerm);
+        const { searchTerm, limit } = validateRequest(relatedTermSchema, req.query);
         const data = await wordService.getRelatedWords(searchTerm, limit);
         sendResponse.ok(res, {
             message: SuccessMessage.RELATED_WORDS_SUCCESS,
             data,
         });
     } catch (error) {
+        console.log(error);
         sendResponse.fail(req, res, ErrorMessage.RELATED_WORDS_ERROR);
     }
 };
@@ -92,12 +92,12 @@ exports.getAllWords = async (req, res) => {
 exports.checkDuplicateWord = async (req, res) => {
     try {
         const { word } = req.body; // req.body 에서 word 추출
-        console.log("전달된 중복 검수 단어", );
+        console.log('전달된 중복 검수 단어');
         const isDataExist = await wordService.checkDuplicateWord(word);
         data = { isDataExist };
-        console.log("중복검수 결과", data);
+        console.log('중복검수 결과', data);
 
-        // 중복 단어가 있는 경우 
+        // 중복 단어가 있는 경우
         if (isDataExist) {
             return sendResponse.ok(res, {
                 message: ErrorMessage.EXIST_WORD,
@@ -109,9 +109,7 @@ exports.checkDuplicateWord = async (req, res) => {
             message: SuccessMessage.CHECK_DUPLICATE_REQUEST_SUCCESS,
             data,
         });
-
     } catch (error) {
         sendResponse.fail(req, res, ErrorMessage.CHECK_DUPLICATE_REQUEST_ERROR);
     }
-}
-
+};

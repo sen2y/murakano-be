@@ -10,7 +10,6 @@ exports.getSearchWords = async (searchTerm) => {
         if (!searchWords) {
             console.log('Search term not found in Word collection');
         }
-        console.log(888, searchWords);
         return searchWords;
     } catch (error) {
         console.log('Error while getting search words:', error);
@@ -31,7 +30,8 @@ exports.getRankWords = async () => {
 
 exports.getRelatedWords = async (searchTerm, limit) => {
     try {
-        const relatedWords = await Word.find({ word: new RegExp(searchTerm, 'i') })
+        const escapedTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const relatedWords = await Word.find({ word: new RegExp(escapedTerm, 'i') })
             .sort({ freq: -1 })
             .limit(parseInt(limit));
         const wordNames = relatedWords.map((word) => word.word);
@@ -163,7 +163,8 @@ exports.deleteWordContributor = async (_id) => {
 };
 exports.checkDuplicateWord = async (word) => {
     try {
-        const wordExists = await Word.findOne({ word: { $regex: new RegExp(`^${word}$`, 'i') } });
+        const escapedTerm = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const wordExists = await Word.findOne({ word: { $regex: new RegExp(`^${escapedTerm}$`, 'i') } });
         console.log('wordExists:', wordExists);
         return wordExists;
     } catch (error) {
