@@ -95,7 +95,9 @@ exports.postWords = async (userId, formData, nickname, type) => {
         console.log('User before modification:', JSON.stringify(user.requests, null, 2));
 
         // 이미 존재하는 단어 요청 확인 (status가 'pend'인 경우에만 중복 확인)
-        const existingRequest = user.requests.find((req) => req.word === formData.devTerm && req.status === 'pend' && req.deletedAt === 'null');
+        const existingRequest = user.requests.find(
+            (req) => req.word === formData.devTerm && req.status === 'pend' && req.deletedAt === 'null'
+        );
         if (existingRequest) {
             console.log('이미 같은 단어 요청이 존재합니다.');
             throw new Error('Word request already exists');

@@ -16,5 +16,4 @@ wordRouter.post('/search/:searchTerm', isUser, getSearchWords);
 //등록요청 단어 중복검사
 wordRouter.post('/duplicate', checkDuplicateWord);
 
-
 module.exports = wordRouter;
